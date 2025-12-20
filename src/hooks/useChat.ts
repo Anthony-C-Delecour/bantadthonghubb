@@ -109,11 +109,17 @@ export function useChat() {
   }, [currentSessionId, createNewSession]);
 
   const deleteSession = useCallback((sessionId: string) => {
-    setSessions(prev => prev.filter(s => s.id !== sessionId));
-    if (currentSessionId === sessionId) {
-      setCurrentSessionId(sessions.length > 1 ? sessions.find(s => s.id !== sessionId)?.id || null : null);
-    }
-  }, [currentSessionId, sessions]);
+    setSessions(prev => {
+      const remaining = prev.filter(s => s.id !== sessionId);
+      // If we're deleting the current session, clear the current session ID
+      if (currentSessionId === sessionId) {
+        // Find another session to switch to, or null if none left
+        const nextSession = remaining.length > 0 ? remaining[0] : null;
+        setCurrentSessionId(nextSession?.id || null);
+      }
+      return remaining;
+    });
+  }, [currentSessionId]);
 
   const switchSession = useCallback((sessionId: string) => {
     const session = sessions.find(s => s.id === sessionId);
