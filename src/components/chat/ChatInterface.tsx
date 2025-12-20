@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { ChatSession, ChatMode } from "@/types/chat";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
@@ -14,6 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { HelpSupportDialog } from "./HelpSupportDialog";
+import { ProfileDialog } from "./ProfileDialog";
 
 interface ChatInterfaceProps {
   session: ChatSession | undefined;
@@ -61,6 +63,8 @@ export function ChatInterface({
 }: ChatInterfaceProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const emptyState = modeEmptyStates[currentMode];
+  const [helpDialogOpen, setHelpDialogOpen] = useState(false);
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -116,11 +120,11 @@ export function ChatInterface({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setProfileDialogOpen(true)}>
               <User className="h-4 w-4 mr-2" />
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setHelpDialogOpen(true)}>
               <HelpCircle className="h-4 w-4 mr-2" />
               Help & Support
             </DropdownMenuItem>
@@ -132,6 +136,10 @@ export function ChatInterface({
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
+
+      {/* Dialogs */}
+      <HelpSupportDialog open={helpDialogOpen} onOpenChange={setHelpDialogOpen} />
+      <ProfileDialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen} />
 
       {/* Messages Area */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin">

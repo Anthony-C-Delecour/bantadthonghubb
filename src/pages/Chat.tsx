@@ -49,12 +49,19 @@ export default function Chat() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Create initial session
+  // Only create initial session on first mount, not when all sessions are deleted
   useEffect(() => {
-    if (sessions.length === 0) {
-      createNewSession();
+    // Only auto-create on initial load if no sessions exist
+    const isInitialLoad = sessions.length === 0 && !currentSessionId;
+    if (isInitialLoad) {
+      // Check if this is truly first load (no user interaction yet)
+      const hasUserInteracted = sessionStorage.getItem("hubb_user_interacted");
+      if (!hasUserInteracted) {
+        createNewSession();
+        sessionStorage.setItem("hubb_user_interacted", "true");
+      }
     }
-  }, [sessions.length, createNewSession]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("hubb_user");
