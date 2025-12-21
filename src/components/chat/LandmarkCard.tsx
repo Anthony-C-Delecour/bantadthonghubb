@@ -1,6 +1,7 @@
 import { Star, MapPin, Camera, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export interface LandmarkReview {
   id: string;
@@ -36,6 +37,8 @@ interface LandmarkCardProps {
 }
 
 export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProps) {
+  const { t } = useLanguage();
+  
   return (
     <div
       onClick={onClick}
@@ -89,10 +92,10 @@ export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProp
 
         <div className="flex items-center gap-2 text-xs">
           <span className="px-2 py-1 bg-muted rounded-full">
-            Best: {landmark.bestTimeToVisit}
+            {t("bestTime")}: {landmark.bestTimeToVisit}
           </span>
           <span className="px-2 py-1 bg-muted rounded-full">
-            ~{landmark.estimatedVisitTime}
+            {t("estimatedTime")}{landmark.estimatedVisitTime}
           </span>
         </div>
 
@@ -125,7 +128,7 @@ export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProp
         )}
 
         <Button variant="ghost" size="sm" className="w-full mt-3">
-          View on Map <ChevronRight className="h-4 w-4 ml-1" />
+          {t("viewOnMap")} <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
       </div>
     </div>

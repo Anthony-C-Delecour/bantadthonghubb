@@ -15,9 +15,16 @@ import {
 import { cn } from "@/lib/utils";
 import { HelpSupportDialog } from "./HelpSupportDialog";
 import { ProfileDialog } from "./ProfileDialog";
-import { chatPromptSuggestions } from "@/data/mockData";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
+
+const promptSuggestionKeys = [
+  "findRestaurantNoWait",
+  "bestCheapEats", 
+  "premiumSeafood",
+  "somethingSpicy",
+  "lateNightFood",
+] as const;
 
 interface ChatInterfaceProps {
   session: ChatSession | undefined;
@@ -165,13 +172,13 @@ export function ChatInterface({
 
               {/* Quick Prompt Suggestions */}
               <div className="flex flex-wrap justify-center gap-2">
-                {chatPromptSuggestions.map((suggestion) => (
+                {promptSuggestionKeys.map((key) => (
                   <button
-                    key={suggestion}
-                    onClick={() => onSendMessage(suggestion)}
+                    key={key}
+                    onClick={() => onSendMessage(t(key))}
                     className="text-sm px-4 py-2 bg-secondary hover:bg-secondary/80 rounded-full transition-colors border border-border/50"
                   >
-                    {suggestion}
+                    {t(key)}
                   </button>
                 ))}
               </div>
