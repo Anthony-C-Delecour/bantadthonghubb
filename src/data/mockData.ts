@@ -938,8 +938,7 @@ export const mockLandmarksExpanded = [
     image: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&h=600&fit=crop",
     images: [
       "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1607237138185-eedd9c632b0b?w=400&h=400&fit=crop"
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=400&fit=crop"
     ],
     rating: 4.9,
     reviewCount: 3452,
@@ -1060,9 +1059,8 @@ export const mockLandmarksExpanded = [
     id: "6",
     name: "Soi Chula Art Walk",
     description: "Street art corridor featuring murals and installations by local artists. A colorful walking route through the student neighborhood.",
-    image: "https://images.unsplash.com/photo-1569172122301-bc5008bc09c5?w=800&h=600&fit=crop",
+    image: "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=800&h=600&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=400&h=400&fit=crop",
       "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=400&h=400&fit=crop"
     ],
