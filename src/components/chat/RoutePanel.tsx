@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Car, Footprints, Bus, Clock, MapPin, Navigation, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export type TransportMode = "walking" | "driving" | "transit";
 
@@ -28,12 +29,6 @@ interface RoutePanelProps {
   onStartNavigation: () => void;
 }
 
-const transportModes: { mode: TransportMode; icon: typeof Car; label: string }[] = [
-  { mode: "walking", icon: Footprints, label: "Walk" },
-  { mode: "driving", icon: Car, label: "Drive" },
-  { mode: "transit", icon: Bus, label: "Transit" },
-];
-
 function formatDuration(seconds: number): string {
   if (seconds < 60) return `${Math.round(seconds)} sec`;
   if (seconds < 3600) return `${Math.round(seconds / 60)} min`;
@@ -58,6 +53,13 @@ export function RoutePanel({
 }: RoutePanelProps) {
   const [showSteps, setShowSteps] = useState(false);
   const currentRoute = routes[selectedMode];
+  const { t } = useLanguage();
+
+  const transportModes: { mode: TransportMode; icon: typeof Car; labelKey: string }[] = [
+    { mode: "walking", icon: Footprints, labelKey: "walk" },
+    { mode: "driving", icon: Car, labelKey: "drive" },
+    { mode: "transit", icon: Bus, labelKey: "transit" },
+  ];
 
   return (
     <div className="bg-background/95 backdrop-blur-sm border-t border-border p-4 space-y-4">
@@ -74,7 +76,7 @@ export function RoutePanel({
 
       {/* Transport Mode Selector */}
       <div className="flex gap-2">
-        {transportModes.map(({ mode, icon: Icon, label }) => {
+        {transportModes.map(({ mode, icon: Icon, labelKey }) => {
           const route = routes[mode];
           return (
             <button
@@ -91,7 +93,7 @@ export function RoutePanel({
                 "h-5 w-5 mx-auto mb-1",
                 selectedMode === mode ? "text-primary" : "text-muted-foreground"
               )} />
-              <div className="text-xs font-medium">{label}</div>
+              <div className="text-xs font-medium">{t(labelKey)}</div>
               {route && (
                 <div className="text-xs text-muted-foreground mt-1">
                   {formatDuration(route.duration)}
@@ -125,9 +127,9 @@ export function RoutePanel({
               className="text-xs"
             >
               {showSteps ? (
-                <>Hide Steps <ChevronUp className="h-3 w-3 ml-1" /></>
+                <>{t("hideSteps")} <ChevronUp className="h-3 w-3 ml-1" /></>
               ) : (
-                <>Show Steps <ChevronDown className="h-3 w-3 ml-1" /></>
+                <>{t("showSteps")} <ChevronDown className="h-3 w-3 ml-1" /></>
               )}
             </Button>
           </div>
@@ -160,7 +162,7 @@ export function RoutePanel({
         disabled={!currentRoute}
       >
         <Navigation className="h-4 w-4 mr-2" />
-        Start Navigation
+        {t("startNavigation")}
       </Button>
     </div>
   );

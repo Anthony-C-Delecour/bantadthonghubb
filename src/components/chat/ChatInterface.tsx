@@ -31,26 +31,26 @@ interface ChatInterfaceProps {
   isSidebarCollapsed: boolean;
 }
 
-const modeEmptyStates: Record<ChatMode, { icon: typeof Sparkles; title: string; description: string }> = {
+const modeEmptyStates: Record<ChatMode, { icon: typeof Sparkles; titleKey: string; descriptionKey: string }> = {
   chat: {
     icon: Sparkles,
-    title: "Start a Conversation",
-    description: "Ask me about restaurants, queue times, or local recommendations!",
+    titleKey: "startConversation",
+    descriptionKey: "startConversationDesc",
   },
   itinerary: {
     icon: Map,
-    title: "Plan Your Adventure",
-    description: "Tell me your budget and interests, and I'll create the perfect itinerary.",
+    titleKey: "planAdventure",
+    descriptionKey: "planAdventureDesc",
   },
   landmark: {
     icon: Landmark,
-    title: "Discover Landmarks",
-    description: "Find Instagram-worthy spots and hidden gems in Bantadthong.",
+    titleKey: "discoverLandmarks",
+    descriptionKey: "discoverLandmarksDesc",
   },
   polaroid: {
     icon: Camera,
-    title: "Create Polaroids",
-    description: "Upload your photos and I'll transform them into beautiful polaroids.",
+    titleKey: "createPolaroids",
+    descriptionKey: "createPolaroidsDesc",
   },
 };
 
@@ -105,11 +105,11 @@ export function ChatInterface({
 
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium capitalize">
-              {currentMode === "chat" ? "Chat" : `${currentMode} Mode`}
+              {currentMode === "chat" ? t("chatMode") : t(`${currentMode}Mode`)}
             </span>
             {currentMode !== "chat" && (
               <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                Active
+                {t("active")}
               </span>
             )}
           </div>
@@ -158,9 +158,9 @@ export function ChatInterface({
               <HubbLogo size="lg" className="mb-6" />
               
               <div className="bg-card border border-border rounded-2xl p-6 mb-6">
-                <emptyState.icon className="h-12 w-12 mx-auto mb-4 text-primary opacity-80" />
-                <h2 className="text-xl font-semibold mb-2">{emptyState.title}</h2>
-                <p className="text-muted-foreground">{emptyState.description}</p>
+              <emptyState.icon className="h-12 w-12 mx-auto mb-4 text-primary opacity-80" />
+                <h2 className="text-xl font-semibold mb-2">{t(emptyState.titleKey)}</h2>
+                <p className="text-muted-foreground">{t(emptyState.descriptionKey)}</p>
               </div>
 
               {/* Quick Prompt Suggestions */}
