@@ -2,7 +2,6 @@ import { useRef, useEffect, useState } from "react";
 import { ChatSession, ChatMode } from "@/types/chat";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { HubbLogo } from "@/components/HubbLogo";
 import { Menu, User, HelpCircle, LogOut, Map, Landmark, Camera, Sparkles } from "lucide-react";
@@ -16,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { HelpSupportDialog } from "./HelpSupportDialog";
 import { ProfileDialog } from "./ProfileDialog";
+import { chatPromptSuggestions } from "@/data/mockData";
 
 interface ChatInterfaceProps {
   session: ChatSession | undefined;
@@ -25,6 +25,7 @@ interface ChatInterfaceProps {
   onNewChat: () => void;
   onToggleSidebar: () => void;
   onLogout: () => void;
+  onRestaurantClick?: (restaurantId: string) => void;
   isSidebarCollapsed: boolean;
 }
 
@@ -59,6 +60,7 @@ export function ChatInterface({
   onNewChat,
   onToggleSidebar,
   onLogout,
+  onRestaurantClick,
   isSidebarCollapsed,
 }: ChatInterfaceProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -154,17 +156,13 @@ export function ChatInterface({
                 <p className="text-muted-foreground">{emptyState.description}</p>
               </div>
 
-              {/* Quick Suggestions */}
+              {/* Quick Prompt Suggestions */}
               <div className="flex flex-wrap justify-center gap-2">
-                {[
-                  "Find me a restaurant with no wait",
-                  "What's good to eat nearby?",
-                  "Best photo spots",
-                ].map((suggestion) => (
+                {chatPromptSuggestions.map((suggestion) => (
                   <button
                     key={suggestion}
                     onClick={() => onSendMessage(suggestion)}
-                    className="text-sm px-4 py-2 bg-secondary hover:bg-secondary/80 rounded-full transition-colors"
+                    className="text-sm px-4 py-2 bg-secondary hover:bg-secondary/80 rounded-full transition-colors border border-border/50"
                   >
                     {suggestion}
                   </button>
@@ -179,6 +177,7 @@ export function ChatInterface({
                 key={message.id} 
                 message={message}
                 isLatest={index === session.messages.length - 1}
+                onRestaurantClick={onRestaurantClick}
               />
             ))}
             
