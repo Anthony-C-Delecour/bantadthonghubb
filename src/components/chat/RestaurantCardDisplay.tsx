@@ -1,6 +1,7 @@
 import { RestaurantCard } from "@/types/chat";
 import { Star, Clock, MapPin, Users, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface RestaurantCardDisplayProps {
   restaurant: RestaurantCard;
@@ -10,6 +11,7 @@ interface RestaurantCardDisplayProps {
 
 export function RestaurantCardDisplay({ restaurant, onClick, className }: RestaurantCardDisplayProps) {
   const availabilityPercent = (restaurant.tablesAvailable / restaurant.totalTables) * 100;
+  const { t } = useLanguage();
   
   return (
     <div 
@@ -51,7 +53,7 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
         <div className="flex items-center gap-4 text-sm">
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <Clock className="h-3.5 w-3.5" />
-            <span>{restaurant.waitTime === 0 ? "No wait" : `${restaurant.waitTime} min`}</span>
+            <span>{restaurant.waitTime === 0 ? t("noWait") : `${restaurant.waitTime} ${t("minWait")}`}</span>
           </div>
           <div className="flex items-center gap-1.5 text-muted-foreground">
             <MapPin className="h-3.5 w-3.5" />
@@ -64,13 +66,13 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
           <div className="flex items-center justify-between text-xs">
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Users className="h-3.5 w-3.5" />
-              <span>Tables</span>
+              <span>{t("tables")}</span>
             </div>
             <span className={cn(
               "font-medium",
               availabilityPercent > 50 ? "text-notification" : availabilityPercent > 20 ? "text-warning" : "text-destructive"
             )}>
-              {restaurant.tablesAvailable} of {restaurant.totalTables} available
+              {restaurant.tablesAvailable} {t("of")} {restaurant.totalTables} {t("available")}
             </span>
           </div>
           <div className="h-1.5 bg-muted rounded-full overflow-hidden">
@@ -99,7 +101,7 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
         {/* Click hint */}
         <div className="flex items-center gap-1 text-xs text-primary opacity-0 group-hover:opacity-100 transition-opacity pt-1">
           <Navigation className="h-3 w-3" />
-          <span>Click to view on map</span>
+          <span>{t("clickToViewMap")}</span>
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { User, Camera, Check } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ProfileDialogProps {
   open: boolean;
@@ -28,6 +29,7 @@ interface UserData {
 
 export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -53,7 +55,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
   const handleSave = () => {
     if (!editUsername.trim()) {
       toast({
-        title: "Username cannot be empty",
+        title: t("usernameEmpty"),
         variant: "destructive",
       });
       return;
@@ -68,8 +70,8 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
     setUserData(updatedUser as UserData);
     setIsEditing(false);
     toast({
-      title: "Profile updated",
-      description: "Your profile has been updated successfully.",
+      title: t("profileUpdated"),
+      description: t("profileUpdatedDesc"),
     });
   };
 
@@ -83,7 +85,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
         localStorage.setItem("hubb_user", JSON.stringify(updatedUser));
         setUserData(updatedUser as UserData);
         toast({
-          title: "Profile picture updated",
+          title: t("profilePictureUpdated"),
         });
       };
       reader.readAsDataURL(file);
@@ -103,9 +105,9 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Profile</DialogTitle>
+          <DialogTitle>{t("profileTitle")}</DialogTitle>
           <DialogDescription>
-            View and manage your account information.
+            {t("profileDesc")}
           </DialogDescription>
         </DialogHeader>
 
@@ -142,29 +144,29 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
               <div className="space-y-4">
                 {/* Display Name */}
                 <div className="space-y-2">
-                  <Label htmlFor="displayName">Display Name</Label>
+                  <Label htmlFor="displayName">{t("displayName")}</Label>
                   <Input
                     id="displayName"
                     value={editDisplayName}
                     onChange={(e) => setEditDisplayName(e.target.value)}
-                    placeholder="Enter display name"
+                    placeholder={t("enterDisplayName")}
                   />
                 </div>
 
                 {/* Username */}
                 <div className="space-y-2">
-                  <Label htmlFor="username">Username</Label>
+                  <Label htmlFor="username">{t("username")}</Label>
                   <Input
                     id="username"
                     value={editUsername}
                     onChange={(e) => setEditUsername(e.target.value)}
-                    placeholder="Enter username"
+                    placeholder={t("enterUsername")}
                   />
                 </div>
 
                 <div className="flex gap-2">
                   <Button onClick={handleSave} className="flex-1">
-                    Save Changes
+                    {t("saveChanges")}
                   </Button>
                   <Button
                     variant="outline"
@@ -174,7 +176,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
                       setEditUsername(userData.username);
                     }}
                   >
-                    Cancel
+                    {t("cancel")}
                   </Button>
                 </div>
               </div>
@@ -182,29 +184,29 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
               <div className="space-y-4">
                 {/* Display Name */}
                 <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Display Name</Label>
+                  <Label className="text-xs text-muted-foreground">{t("displayName")}</Label>
                   <p className="text-sm font-medium">{userData.displayName || userData.username}</p>
                 </div>
 
                 {/* Username */}
                 <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Username</Label>
+                  <Label className="text-xs text-muted-foreground">{t("username")}</Label>
                   <p className="text-sm font-medium">@{userData.username}</p>
                 </div>
 
                 {/* Account Type */}
                 <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Account Type</Label>
-                  <p className="text-sm font-medium capitalize">{userData.accountType || "User"}</p>
+                  <Label className="text-xs text-muted-foreground">{t("accountType")}</Label>
+                  <p className="text-sm font-medium capitalize">{t(userData.accountType) || t("user")}</p>
                 </div>
 
                 {/* Data Sharing Status */}
                 <div className="space-y-1">
-                  <Label className="text-xs text-muted-foreground">Data Sharing</Label>
+                  <Label className="text-xs text-muted-foreground">{t("dataSharing")}</Label>
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1.5 text-sm">
                       <div className="w-2.5 h-2.5 rounded-full bg-notification" />
-                      <span>Data sharing enabled</span>
+                      <span>{t("dataSharingEnabled")}</span>
                       <Check className="h-4 w-4 text-notification" />
                     </div>
                   </div>
@@ -215,7 +217,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
                   onClick={() => setIsEditing(true)}
                   className="w-full"
                 >
-                  Edit Profile
+                  {t("editProfile")}
                 </Button>
               </div>
             )}
@@ -224,7 +226,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
 
         <div className="flex justify-end">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Close
+            {t("close")}
           </Button>
         </div>
       </DialogContent>
