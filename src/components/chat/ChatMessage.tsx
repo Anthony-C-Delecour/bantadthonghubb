@@ -62,7 +62,7 @@ export function ChatMessage({ message, isLatest, onRestaurantClick }: ChatMessag
               <RestaurantCardDisplay 
                 key={restaurant.id}
                 restaurant={restaurant}
-                onClick={() => onRestaurantClick?.(restaurant.id)}
+                onClick={() => onRestaurantClick && onRestaurantClick(restaurant.id)}
                 className="w-72 flex-shrink-0"
               />
             ))}

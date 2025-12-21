@@ -248,7 +248,7 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
                 {/* Content */}
                 <div
                   className="flex-1 cursor-pointer"
-                  onClick={() => onSelectRestaurant?.(stop.restaurant.id)}
+                  onClick={() => onSelectRestaurant && onSelectRestaurant(stop.restaurant.id)}
                 >
                   <div className="flex items-start justify-between">
                     <div>
@@ -300,7 +300,7 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
               Edit Preferences
             </Button>
             <Button
-              onClick={() => onSelectRestaurant?.(itinerary[0]?.restaurant.id)}
+              onClick={() => itinerary[0] && onSelectRestaurant && onSelectRestaurant(itinerary[0].restaurant.id)}
               className="flex-1"
             >
               View on Map
