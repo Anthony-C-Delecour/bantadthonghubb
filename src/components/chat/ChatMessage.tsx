@@ -1,16 +1,19 @@
 import { Message } from "@/types/chat";
 import { RestaurantCardDisplay } from "./RestaurantCardDisplay";
 import { cn } from "@/lib/utils";
-import { HubbLogo } from "@/components/HubbLogo";
 import { User } from "lucide-react";
 
 interface ChatMessageProps {
   message: Message;
   isLatest?: boolean;
+  onRestaurantClick?: (restaurantId: string) => void;
 }
 
-export function ChatMessage({ message, isLatest }: ChatMessageProps) {
+export function ChatMessage({ message, isLatest, onRestaurantClick }: ChatMessageProps) {
   const isUser = message.role === "user";
+
+  // Get all restaurant cards (support both single and multiple)
+  const restaurantCards = message.restaurantCards || (message.restaurantCard ? [message.restaurantCard] : []);
 
   return (
     <div 
@@ -33,7 +36,7 @@ export function ChatMessage({ message, isLatest }: ChatMessageProps) {
       </div>
 
       {/* Message Content */}
-      <div className={cn("flex flex-col gap-2 max-w-[75%]", isUser && "items-end")}>
+      <div className={cn("flex flex-col gap-2 max-w-[85%]", isUser && "items-end")}>
         <div className={cn(
           "message-bubble",
           isUser ? "message-bubble-user" : "message-bubble-bot"
@@ -52,12 +55,18 @@ export function ChatMessage({ message, isLatest }: ChatMessageProps) {
           </div>
         </div>
 
-        {/* Restaurant Card */}
-        {message.restaurantCard && (
-          <RestaurantCardDisplay 
-            restaurant={message.restaurantCard}
-            className="w-72 mt-2"
-          />
+        {/* Restaurant Cards - horizontal scrollable */}
+        {restaurantCards.length > 0 && (
+          <div className="flex gap-3 overflow-x-auto pb-2 mt-2 max-w-full scrollbar-thin">
+            {restaurantCards.map((restaurant) => (
+              <RestaurantCardDisplay 
+                key={restaurant.id}
+                restaurant={restaurant}
+                onClick={() => onRestaurantClick?.(restaurant.id)}
+                className="w-72 flex-shrink-0"
+              />
+            ))}
+          </div>
         )}
 
         {/* Timestamp */}
