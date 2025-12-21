@@ -6,8 +6,11 @@ const MapContent = lazy(() => import("./MapContent"));
 
 interface BantadthongMapProps {
   selectedRestaurantId?: string | null;
+  selectedLandmarkId?: string | null;
   onRestaurantSelect?: (restaurant: RestaurantCard) => void;
+  onLandmarkSelect?: (landmarkId: string) => void;
   showRoute?: boolean;
+  showLandmarks?: boolean;
   userLocation?: { lat: number; lng: number } | null;
   className?: string;
   onClose?: () => void;
@@ -15,8 +18,11 @@ interface BantadthongMapProps {
 
 export function BantadthongMap({
   selectedRestaurantId,
+  selectedLandmarkId,
   onRestaurantSelect,
+  onLandmarkSelect,
   showRoute = false,
+  showLandmarks = false,
   userLocation,
   className,
   onClose,
@@ -45,8 +51,11 @@ export function BantadthongMap({
     <Suspense fallback={Loading}>
       <MapContent
         selectedRestaurantId={selectedRestaurantId}
+        selectedLandmarkId={selectedLandmarkId}
         onRestaurantSelect={onRestaurantSelect}
+        onLandmarkSelect={onLandmarkSelect}
         showRoute={showRoute}
+        showLandmarks={showLandmarks}
         userLocation={userLocation}
         className={className}
         onClose={onClose}

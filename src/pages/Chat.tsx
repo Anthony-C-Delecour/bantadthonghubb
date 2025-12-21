@@ -6,6 +6,7 @@ import { LiveNotifications } from "@/components/chat/LiveNotification";
 import { BantadthongMap } from "@/components/chat/BantadthongMap";
 import { PolaroidMode } from "@/components/chat/PolaroidMode";
 import { ItineraryMode } from "@/components/chat/ItineraryMode";
+import { LandmarkMode } from "@/components/chat/LandmarkMode";
 import { useChat } from "@/hooks/useChat";
 import { useToast } from "@/hooks/use-toast";
 import { mockRestaurants } from "@/data/mockData";
@@ -19,6 +20,7 @@ export default function Chat() {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<string | null>(null);
+  const [selectedLandmarkId, setSelectedLandmarkId] = useState<string | null>(null);
   const [showMap, setShowMap] = useState(false);
 
   const {
@@ -148,23 +150,16 @@ export default function Chat() {
         return (
           <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
             <div className="lg:w-1/2 overflow-y-auto">
-              <ChatInterface
-                session={currentSession}
-                isLoading={isLoading}
-                currentMode={currentMode}
-                onSendMessage={sendMessage}
-                onNewChat={handleNewChat}
-                onToggleSidebar={handleToggleSidebar}
-                onLogout={handleLogout}
-                onRestaurantClick={handleRestaurantClick}
-                isSidebarCollapsed={isSidebarCollapsed}
+              <LandmarkMode
+                selectedLandmarkId={selectedLandmarkId}
+                onSelectLandmark={(id) => setSelectedLandmarkId(id)}
               />
             </div>
             <div className="lg:w-1/2 h-64 lg:h-full border-l border-border">
               <BantadthongMap
-                selectedRestaurantId={selectedRestaurantId}
-                onRestaurantSelect={handleMapRestaurantSelect}
+                selectedLandmarkId={selectedLandmarkId}
                 showRoute={true}
+                showLandmarks={true}
                 className="h-full rounded-none"
               />
             </div>
