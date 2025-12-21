@@ -2,6 +2,8 @@
 
 Your AI-powered travel companion for exploring the Bantadthong area near Chulalongkorn University.
 
+**Live Demo:** [https://bantadthonghubb.lovable.app](https://bantadthonghubb.lovable.app)
+
 ## About
 
 .Hubb is an interactive chat-based travel guide that helps users discover landmarks, restaurants, and local attractions in the Bantadthong neighborhood of Bangkok. Features include:
