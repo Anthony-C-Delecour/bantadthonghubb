@@ -1,11 +1,7 @@
-import { useEffect, useState, lazy, Suspense } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import { RestaurantCard } from "@/types/chat";
-import { mockRestaurants } from "@/data/mockData";
-import { Star, Clock, Navigation, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-// Lazy load the map to avoid SSR issues
 const MapContent = lazy(() => import("./MapContent"));
 
 interface BantadthongMapProps {
@@ -31,20 +27,22 @@ export function BantadthongMap({
     setIsClient(true);
   }, []);
 
-  if (!isClient) {
-    return (
-      <div className={cn("relative rounded-2xl overflow-hidden border border-border bg-muted flex items-center justify-center", className)} style={{ minHeight: "400px" }}>
-        <div className="text-muted-foreground">Loading map...</div>
-      </div>
-    );
-  }
+  const Loading = (
+    <div
+      className={cn(
+        "relative rounded-2xl overflow-hidden border border-border bg-muted flex items-center justify-center",
+        className
+      )}
+      style={{ minHeight: "400px" }}
+    >
+      <div className="text-muted-foreground">Loading map...</div>
+    </div>
+  );
+
+  if (!isClient) return Loading;
 
   return (
-    <Suspense fallback={
-      <div className={cn("relative rounded-2xl overflow-hidden border border-border bg-muted flex items-center justify-center", className)} style={{ minHeight: "400px" }}>
-        <div className="text-muted-foreground">Loading map...</div>
-      </div>
-    }>
+    <Suspense fallback={Loading}>
       <MapContent
         selectedRestaurantId={selectedRestaurantId}
         onRestaurantSelect={onRestaurantSelect}
