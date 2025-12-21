@@ -16,6 +16,8 @@ import { cn } from "@/lib/utils";
 import { HelpSupportDialog } from "./HelpSupportDialog";
 import { ProfileDialog } from "./ProfileDialog";
 import { chatPromptSuggestions } from "@/data/mockData";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ChatInterfaceProps {
   session: ChatSession | undefined;
@@ -67,6 +69,7 @@ export function ChatInterface({
   const emptyState = modeEmptyStates[currentMode];
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const { t } = useLanguage();
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
@@ -112,31 +115,35 @@ export function ChatInterface({
           </div>
         </div>
 
-        {/* Profile Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                <User className="h-4 w-4 text-primary-foreground" />
-              </div>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuItem onClick={() => setProfileDialogOpen(true)}>
-              <User className="h-4 w-4 mr-2" />
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setHelpDialogOpen(true)}>
-              <HelpCircle className="h-4 w-4 mr-2" />
-              Help & Support
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={onLogout} className="text-destructive">
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Language Selector & Profile Menu */}
+        <div className="flex items-center gap-1">
+          <LanguageSelector />
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                  <User className="h-4 w-4 text-primary-foreground" />
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 bg-background z-[1000]">
+              <DropdownMenuItem onClick={() => setProfileDialogOpen(true)}>
+                <User className="h-4 w-4 mr-2" />
+                {t("profile")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setHelpDialogOpen(true)}>
+                <HelpCircle className="h-4 w-4 mr-2" />
+                {t("help")}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onLogout} className="text-destructive">
+                <LogOut className="h-4 w-4 mr-2" />
+                {t("signOut")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </header>
 
       {/* Dialogs */}

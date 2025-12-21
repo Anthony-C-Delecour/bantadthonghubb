@@ -283,6 +283,12 @@ export default function MapContent({
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [navPosition, setNavPosition] = useState<[number, number] | null>(null);
   const navIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Real-time GPS tracking state
+  const [isLiveTracking, setIsLiveTracking] = useState(false);
+  const [gpsAccuracy, setGpsAccuracy] = useState<number | null>(null);
+  const watchIdRef = useRef<number | null>(null);
+  const accuracyCircleRef = useRef<L.Circle | null>(null);
 
   // Find selected restaurant from props
   useEffect(() => {
@@ -310,7 +316,7 @@ export default function MapContent({
     setMapCenter([l.lat, l.lng]);
   }, [selectedLandmarkId]);
 
-  // Get user's actual location
+  // Get user's actual location (one-time)
   const requestUserLocation = useCallback(() => {
     if (!navigator.geolocation) {
       toast({
@@ -330,12 +336,12 @@ export default function MapContent({
         if (lat > 13.5 && lat < 14.0 && lng > 100.3 && lng < 100.8) {
           setUserPos({ lat, lng });
           setMapCenter([lat, lng]);
+          setGpsAccuracy(pos.coords.accuracy);
           toast({
             title: "📍 Location found",
-            description: "Using your current location",
+            description: `Accuracy: ${Math.round(pos.coords.accuracy)}m`,
           });
         } else {
-          // User is outside Bangkok, use Bantadthong center
           setUserPos(BANTADTHONG_CENTER);
           setMapCenter([BANTADTHONG_CENTER.lat, BANTADTHONG_CENTER.lng]);
           toast({
@@ -353,9 +359,94 @@ export default function MapContent({
           variant: "destructive",
         });
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   }, [toast]);
+
+  // Start real-time GPS tracking
+  const startLiveTracking = useCallback(() => {
+    if (!navigator.geolocation) {
+      toast({
+        title: "Location not supported",
+        description: "Your browser doesn't support geolocation.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLiveTracking(true);
+    toast({
+      title: "🔴 Live tracking enabled",
+      description: "Your location will update in real-time",
+    });
+
+    watchIdRef.current = navigator.geolocation.watchPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const accuracy = pos.coords.accuracy;
+        
+        // Check if within Bangkok area
+        if (lat > 13.5 && lat < 14.0 && lng > 100.3 && lng < 100.8) {
+          setUserPos({ lat, lng });
+          setGpsAccuracy(accuracy);
+          
+          // If navigating, check if reached destination
+          const destination = selectedRestaurant || selectedLandmark;
+          if (destination && isNavigating) {
+            const distance = Math.sqrt(
+              Math.pow((lat - destination.lat) * 111000, 2) +
+              Math.pow((lng - destination.lng) * 111000 * Math.cos(lat * Math.PI / 180), 2)
+            );
+            
+            if (distance < 30) { // Within 30 meters
+              setIsNavigating(false);
+              toast({
+                title: "🎉 You've arrived!",
+                description: `Welcome to ${destination.name}`,
+              });
+            }
+          }
+        }
+      },
+      (error) => {
+        console.error("GPS tracking error:", error);
+        toast({
+          title: "GPS error",
+          description: "Could not update location. Retrying...",
+          variant: "destructive",
+        });
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  }, [toast, selectedRestaurant, selectedLandmark, isNavigating]);
+
+  // Stop real-time GPS tracking
+  const stopLiveTracking = useCallback(() => {
+    if (watchIdRef.current !== null) {
+      navigator.geolocation.clearWatch(watchIdRef.current);
+      watchIdRef.current = null;
+    }
+    setIsLiveTracking(false);
+    setGpsAccuracy(null);
+    toast({
+      title: "Live tracking stopped",
+      description: "Your location is no longer being tracked",
+    });
+  }, [toast]);
+
+  // Cleanup GPS watch on unmount
+  useEffect(() => {
+    return () => {
+      if (watchIdRef.current !== null) {
+        navigator.geolocation.clearWatch(watchIdRef.current);
+      }
+    };
+  }, []);
 
   // Initial location request
   useEffect(() => {
@@ -565,19 +656,45 @@ export default function MapContent({
     });
   }, [showLandmarks, onLandmarkSelect, selectedLandmark?.id]);
 
-  // Render / update user marker
+  // Render / update user marker with accuracy circle
   useEffect(() => {
     const map = mapRef.current;
     if (!map || !userPos) return;
 
+    // Update or create user marker
     if (!userMarkerRef.current) {
       userMarkerRef.current = L.marker([userPos.lat, userPos.lng], { icon: createUserIcon() })
         .addTo(map)
-        .bindPopup('<div style="font-size: 12px; font-weight: 600">📍 You are here</div>');
+        .bindPopup(`<div style="font-size: 12px; font-weight: 600">📍 You are here${gpsAccuracy ? ` (±${Math.round(gpsAccuracy)}m)` : ''}</div>`);
     } else {
       userMarkerRef.current.setLatLng([userPos.lat, userPos.lng]);
+      userMarkerRef.current.setPopupContent(`<div style="font-size: 12px; font-weight: 600">📍 You are here${gpsAccuracy ? ` (±${Math.round(gpsAccuracy)}m)` : ''}</div>`);
     }
-  }, [userPos]);
+
+    // Update or create accuracy circle when live tracking
+    if (isLiveTracking && gpsAccuracy) {
+      if (!accuracyCircleRef.current) {
+        accuracyCircleRef.current = L.circle([userPos.lat, userPos.lng], {
+          radius: gpsAccuracy,
+          color: '#3b82f6',
+          fillColor: '#3b82f6',
+          fillOpacity: 0.1,
+          weight: 1,
+        }).addTo(map);
+      } else {
+        accuracyCircleRef.current.setLatLng([userPos.lat, userPos.lng]);
+        accuracyCircleRef.current.setRadius(gpsAccuracy);
+      }
+    } else if (accuracyCircleRef.current) {
+      accuracyCircleRef.current.remove();
+      accuracyCircleRef.current = null;
+    }
+
+    // Center map on user when live tracking
+    if (isLiveTracking) {
+      map.panTo([userPos.lat, userPos.lng]);
+    }
+  }, [userPos, gpsAccuracy, isLiveTracking]);
 
   // Render route polyline
   useEffect(() => {
@@ -711,16 +828,40 @@ export default function MapContent({
         </Button>
       )}
 
-      {/* Locate me button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={requestUserLocation}
-        className="absolute top-3 right-14 z-[1000] bg-background/90 backdrop-blur-sm hover:bg-background"
-        aria-label="Find my location"
-      >
-        <Locate className="h-4 w-4" />
-      </Button>
+      {/* Location controls */}
+      <div className="absolute top-3 right-14 z-[1000] flex gap-1">
+        {/* Live tracking toggle */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={isLiveTracking ? stopLiveTracking : startLiveTracking}
+          className={cn(
+            "bg-background/90 backdrop-blur-sm hover:bg-background",
+            isLiveTracking && "bg-red-500/20 text-red-500 hover:bg-red-500/30"
+          )}
+          aria-label={isLiveTracking ? "Stop live tracking" : "Start live tracking"}
+        >
+          <div className="relative">
+            <Locate className="h-4 w-4" />
+            {isLiveTracking && (
+              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            )}
+          </div>
+        </Button>
+        
+        {/* One-time locate button */}
+        {!isLiveTracking && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={requestUserLocation}
+            className="bg-background/90 backdrop-blur-sm hover:bg-background"
+            aria-label="Find my location"
+          >
+            <Navigation className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
 
       <div ref={mapElRef} className="flex-1" style={{ minHeight: "300px" }} />
 
@@ -742,6 +883,19 @@ export default function MapContent({
           <div className="flex items-center gap-2 pt-1 border-t border-border">
             <div className="w-3 h-3 rounded-full bg-violet-500" />
             <span>Landmark</span>
+          </div>
+        )}
+        {isLiveTracking && (
+          <div className="pt-1 border-t border-border">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+              <span className="text-red-500 font-medium">LIVE</span>
+            </div>
+            {gpsAccuracy && (
+              <div className="text-muted-foreground">
+                Accuracy: ±{Math.round(gpsAccuracy)}m
+              </div>
+            )}
           </div>
         )}
       </div>
