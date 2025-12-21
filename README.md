@@ -1,6 +1,6 @@
 # .Hubb
 
-Your AI-powered travel companion for exploring the Bantadthong area near Chulalongkorn University.
+Your AI-powered travel companion for exploring the Entirety of Bantadthong area.
 
 **Live Demo:** [https://bantadthonghubb.lovable.app](https://bantadthonghubb.lovable.app)
 
