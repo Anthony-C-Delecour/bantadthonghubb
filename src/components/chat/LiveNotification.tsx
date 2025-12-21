@@ -3,8 +3,10 @@ import { LiveNotification as NotificationType } from "@/types/chat";
 import { generateMockNotifications } from "@/data/mockData";
 import { Star, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export function LiveNotifications() {
+  const { t } = useLanguage();
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [currentNotification, setCurrentNotification] = useState<NotificationType | null>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -46,9 +48,9 @@ export function LiveNotifications() {
   const formatTimeAgo = (timestamp: Date) => {
     const diff = Date.now() - timestamp.getTime();
     const minutes = Math.floor(diff / 60000);
-    if (minutes < 1) return "just now";
-    if (minutes === 1) return "1 min ago";
-    return `${minutes} mins ago`;
+    if (minutes < 1) return t("justNow");
+    if (minutes === 1) return `1 ${t("minutesAgo")}`;
+    return `${minutes} ${t("minutesAgo")}`;
   };
 
   const handleDismiss = () => {
@@ -92,14 +94,14 @@ export function LiveNotifications() {
           <p className="text-sm text-muted-foreground">
             {currentNotification.type === "review" ? (
               <>
-                left a review at <span className="font-medium text-foreground">{currentNotification.restaurantName}</span>
+                {t("leftReviewAt")} <span className="font-medium text-foreground">{currentNotification.restaurantName}</span>
                 {currentNotification.comment && (
                   <span className="block mt-1 italic">"{currentNotification.comment}"</span>
                 )}
               </>
             ) : (
               <>
-                just visited <span className="font-medium text-foreground">{currentNotification.restaurantName}</span>
+                {t("justVisited")} <span className="font-medium text-foreground">{currentNotification.restaurantName}</span>
               </>
             )}
           </p>

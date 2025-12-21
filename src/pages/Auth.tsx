@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type AuthMode = "select" | "login" | "register";
 type UserType = "user" | "business";
@@ -15,6 +16,7 @@ type UserType = "user" | "business";
 export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [mode, setMode] = useState<AuthMode>("select");
   const [userType, setUserType] = useState<UserType>("user");
   const [isLoading, setIsLoading] = useState(false);
@@ -77,8 +79,8 @@ export default function Auth() {
     }));
     
     toast({
-      title: mode === "login" ? "Welcome back!" : "Account created!",
-      description: "Redirecting to .Hubb...",
+      title: mode === "login" ? t("welcomeBack") : t("accountCreated"),
+      description: t("redirectingToHubb"),
     });
     
     setIsLoading(false);
@@ -99,8 +101,8 @@ export default function Auth() {
     }));
     
     toast({
-      title: "Signed in with Google",
-      description: "Redirecting to .Hubb...",
+      title: t("signedInWithGoogle"),
+      description: t("redirectingToHubb"),
     });
     
     setIsLoading(false);

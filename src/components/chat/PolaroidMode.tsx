@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Upload, Download, Camera, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface PolaroidModeProps {
   onClose?: () => void;
@@ -10,6 +11,7 @@ interface PolaroidModeProps {
 
 export function PolaroidMode({ onClose }: PolaroidModeProps) {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
@@ -124,8 +126,8 @@ export function PolaroidMode({ onClose }: PolaroidModeProps) {
       setIsProcessing(false);
 
       toast({
-        title: "Polaroid created! 📸",
-        description: "Your photo has been transformed into a polaroid.",
+        title: t("polaroidCreated"),
+        description: t("photoTransformed"),
       });
     };
 
@@ -141,8 +143,8 @@ export function PolaroidMode({ onClose }: PolaroidModeProps) {
     link.click();
 
     toast({
-      title: "Downloaded!",
-      description: "Your polaroid has been saved.",
+      title: t("downloaded"),
+      description: t("polaroidSaved"),
     });
   };
 
@@ -156,9 +158,9 @@ export function PolaroidMode({ onClose }: PolaroidModeProps) {
 
   return (
     <div className="flex flex-col items-center p-6 max-w-md mx-auto">
-      <h2 className="text-xl font-semibold mb-2">Polaroid Mode 📸</h2>
+      <h2 className="text-xl font-semibold mb-2">{t("polaroidModeTitle")}</h2>
       <p className="text-sm text-muted-foreground mb-6 text-center">
-        Transform your Bantadthong memories into vintage polaroids
+        {t("transformMemories")}
       </p>
 
       {/* Hidden canvas for processing */}
@@ -180,8 +182,8 @@ export function PolaroidMode({ onClose }: PolaroidModeProps) {
             <Camera className="h-8 w-8 text-muted-foreground" />
           </div>
           <div className="text-center">
-            <p className="font-medium">Upload a photo</p>
-            <p className="text-sm text-muted-foreground">Click or drag and drop</p>
+            <p className="font-medium">{t("uploadPhoto")}</p>
+            <p className="text-sm text-muted-foreground">{t("clickOrDrag")}</p>
           </div>
         </div>
       )}
@@ -212,12 +214,12 @@ export function PolaroidMode({ onClose }: PolaroidModeProps) {
             {isProcessing ? (
               <>
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                Creating...
+                {t("creating")}
               </>
             ) : (
               <>
                 <Camera className="h-4 w-4 mr-2" />
-                Create Polaroid
+                {t("createPolaroidBtn")}
               </>
             )}
           </Button>
@@ -241,7 +243,7 @@ export function PolaroidMode({ onClose }: PolaroidModeProps) {
           <div className="flex gap-2 mt-6">
             <Button onClick={downloadPolaroid} className="flex-1">
               <Download className="h-4 w-4 mr-2" />
-              Download
+              {t("download")}
             </Button>
             <Button variant="outline" onClick={resetPolaroid}>
               <RefreshCw className="h-4 w-4" />
