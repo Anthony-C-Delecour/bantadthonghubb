@@ -271,9 +271,12 @@ export function useChat() {
   }, []);
 
   const sendMessage = useCallback(async (content: string) => {
-    if (!currentSessionId) {
-      createNewSession();
-      return;
+    let sessionId = currentSessionId;
+    
+    // Create a new session if none exists
+    if (!sessionId) {
+      const newSession = createNewSession();
+      sessionId = newSession.id;
     }
 
     const userMessage: Message = {
@@ -284,7 +287,7 @@ export function useChat() {
     };
 
     setSessions(prev => prev.map(session => {
-      if (session.id === currentSessionId) {
+      if (session.id === sessionId) {
         const updatedMessages = [...session.messages, userMessage];
         const title = session.messages.length <= 3 ? content.slice(0, 30) + (content.length > 30 ? "..." : "") : session.title;
         return { ...session, messages: updatedMessages, title, updatedAt: new Date() };
@@ -308,7 +311,7 @@ export function useChat() {
     };
 
     setSessions(prev => prev.map(session => {
-      if (session.id === currentSessionId) {
+      if (session.id === sessionId) {
         return { ...session, messages: [...session.messages, assistantMessage], updatedAt: new Date() };
       }
       return session;

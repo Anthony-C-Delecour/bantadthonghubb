@@ -13,7 +13,7 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
   
   return (
     <div 
-      onClick={onClick}
+      onClick={() => onClick && onClick()}
       className={cn(
         "restaurant-card group cursor-pointer",
         "bg-card border border-border rounded-2xl p-4 hover:shadow-lg transition-all duration-300",
