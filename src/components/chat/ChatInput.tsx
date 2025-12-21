@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Send, Mic, MicOff, Loader2, MapPin, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -17,13 +18,14 @@ export function ChatInput({
   onSend, 
   isLoading, 
   disabled,
-  placeholder = "Message .Hubb...",
+  placeholder,
   showLocationContext = true,
   onClearLocation
 }: ChatInputProps) {
   const [input, setInput] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { t } = useLanguage();
 
   const handleSubmit = () => {
     if (input.trim() && !isLoading && !disabled) {
@@ -59,7 +61,7 @@ export function ChatInput({
         <div className="flex items-center justify-center mb-2">
           <div className="inline-flex items-center gap-2 text-xs text-muted-foreground bg-secondary/50 px-3 py-1.5 rounded-full">
             <MapPin className="h-3 w-3" />
-            <span>Bantadthong District</span>
+            <span>{t("bantadthongDistrict")}</span>
             {onClearLocation && (
               <button 
                 onClick={onClearLocation}
@@ -102,7 +104,7 @@ export function ChatInput({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder={placeholder || t("messagePlaceholder")}
           disabled={disabled || isLoading}
           className="min-h-[40px] max-h-[200px] resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 py-2.5 px-1 text-base"
           rows={1}
@@ -132,7 +134,7 @@ export function ChatInput({
         <div className="flex items-center justify-center mt-2">
           <div className="flex items-center gap-2 text-sm text-destructive">
             <span className="w-2 h-2 bg-destructive rounded-full animate-pulse" />
-            <span>Listening...</span>
+            <span>{t("listening")}</span>
           </div>
         </div>
       )}

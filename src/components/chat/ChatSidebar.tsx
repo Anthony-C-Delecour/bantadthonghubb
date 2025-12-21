@@ -4,6 +4,7 @@ import { HubbLogo } from "@/components/HubbLogo";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   MessageSquare,
   Plus,
@@ -39,10 +40,10 @@ interface ChatSidebarProps {
 }
 
 const modes = [
-  { id: "chat" as const, label: "Chat", icon: MessageSquare },
-  { id: "itinerary" as const, label: "Itinerary", icon: Map },
-  { id: "landmark" as const, label: "Landmarks", icon: Landmark },
-  { id: "polaroid" as const, label: "Polaroid", icon: Camera },
+  { id: "chat" as const, labelKey: "chat", icon: MessageSquare },
+  { id: "itinerary" as const, labelKey: "itinerary", icon: Map },
+  { id: "landmark" as const, labelKey: "landmark", icon: Landmark },
+  { id: "polaroid" as const, labelKey: "polaroid", icon: Camera },
 ];
 
 export function ChatSidebar({
@@ -58,15 +59,16 @@ export function ChatSidebar({
 }: ChatSidebarProps) {
   const [hoveredSession, setHoveredSession] = useState<string | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const formatDate = (date: Date) => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     
-    if (days === 0) return "Today";
-    if (days === 1) return "Yesterday";
-    if (days < 7) return `${days} days ago`;
+    if (days === 0) return t("today");
+    if (days === 1) return t("yesterday");
+    if (days < 7) return `${days} ${t("daysAgo")}`;
     return date.toLocaleDateString();
   };
 
@@ -133,13 +135,13 @@ export function ChatSidebar({
             className="w-full justify-start gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
           >
             <Plus className="h-4 w-4" />
-            New Chat
+            {t("newChat")}
           </Button>
         </div>
 
         {/* Modes */}
         <div className="p-3 border-b border-sidebar-border">
-          <p className="text-xs font-medium text-muted-foreground mb-2 px-2">MODES</p>
+          <p className="text-xs font-medium text-muted-foreground mb-2 px-2">{t("modes")}</p>
           <div className="space-y-1">
             {modes.map((mode) => (
               <button
@@ -151,9 +153,9 @@ export function ChatSidebar({
                 )}
               >
                 <mode.icon className="h-4 w-4" />
-                <span className="text-sm">{mode.label}</span>
+                <span className="text-sm">{t(mode.labelKey)}</span>
                 {mode.id === "polaroid" && (
-                  <span className="ml-auto text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded">New</span>
+                  <span className="ml-auto text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded">{t("new")}</span>
                 )}
               </button>
             ))}
@@ -163,15 +165,15 @@ export function ChatSidebar({
         {/* Chat History */}
         <div className="flex-1 overflow-hidden">
           <div className="p-3">
-            <p className="text-xs font-medium text-muted-foreground mb-2 px-2">RECENT CHATS</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2 px-2">{t("recentChats")}</p>
           </div>
           <ScrollArea className="flex-1 px-3">
             <div className="space-y-1 pb-4">
               {sessions.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <Sparkles className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No recent chats available</p>
-                  <p className="text-xs">Press "+ New Chat" to start!</p>
+                  <p className="text-sm">{t("noRecentChats")}</p>
+                  <p className="text-xs">{t("pressNewChat")}</p>
                 </div>
               ) : (
                 sessions.map((session) => (
@@ -212,13 +214,13 @@ export function ChatSidebar({
       <AlertDialog open={!!deleteConfirmId} onOpenChange={() => setDeleteConfirmId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this chat?</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteChat")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this chat session and all its messages.
+              {t("deleteChatDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 if (deleteConfirmId) {
@@ -228,7 +230,7 @@ export function ChatSidebar({
               }}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t("delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
