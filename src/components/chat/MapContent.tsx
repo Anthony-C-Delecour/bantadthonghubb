@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -6,7 +6,7 @@ import { RestaurantCard } from "@/types/chat";
 import { allRestaurants, mockLandmarksExpanded } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Clock, Navigation, Star, X, Footprints, Car, Bus, ChevronDown, ChevronUp, MapPin } from "lucide-react";
+import { Clock, Navigation, Star, X, Footprints, Car, Bus, ChevronDown, ChevronUp, MapPin, Locate, Play, Pause, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Fix for default marker icons
@@ -18,12 +18,31 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 });
 
+// Bantadthong area bounds - stricter focus
+const BANTADTHONG_BOUNDS = {
+  north: 13.7500,
+  south: 13.7350,
+  east: 100.5380,
+  west: 100.5200,
+};
+
+const BANTADTHONG_CENTER = { lat: 13.7420, lng: 100.5272 };
+
+// Bangkok transit lines near Bantadthong
+const TRANSIT_LINES = [
+  { name: "BTS Silom Line", color: "#008000", stations: ["National Stadium", "Siam", "Ratchadamri"] },
+  { name: "BTS Sukhumvit Line", color: "#7CB342", stations: ["Siam", "Chit Lom", "Phloen Chit"] },
+  { name: "MRT Blue Line", color: "#1565C0", stations: ["Sam Yan", "Silom", "Lumphini"] },
+];
+
 type TransportMode = "foot" | "car" | "transit";
 
 interface RouteStep {
   instruction: string;
   distance: number;
   duration: number;
+  transitLine?: string;
+  transitColor?: string;
 }
 
 interface RouteInfo {
@@ -31,6 +50,7 @@ interface RouteInfo {
   duration: number;
   coordinates: [number, number][];
   steps: RouteStep[];
+  transitLines?: string[];
 }
 
 const createRestaurantIcon = (isSelected: boolean, waitTime: number) => {
@@ -101,6 +121,35 @@ const createUserIcon = () =>
     iconAnchor: [10, 10],
   });
 
+const createNavigationIcon = () =>
+  L.divIcon({
+    className: "nav-marker",
+    html: `
+      <div style="
+        width: 24px;
+        height: 24px;
+        background: #3b82f6;
+        border: 3px solid white;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <div style="
+          width: 0;
+          height: 0;
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+          border-bottom: 8px solid white;
+          transform: translateY(-1px);
+        "></div>
+      </div>
+    `,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+  });
+
 interface MapContentProps {
   selectedRestaurantId?: string | null;
   selectedLandmarkId?: string | null;
@@ -127,11 +176,12 @@ function formatDistance(meters: number): string {
 }
 
 // Parse OSRM instruction to human-readable text
-function parseInstruction(step: { maneuver: { type: string; modifier?: string }; name?: string }): string {
+function parseInstruction(step: { maneuver: { type: string; modifier?: string }; name?: string }, mode: TransportMode): RouteStep {
   const type = step.maneuver.type;
   const modifier = step.maneuver.modifier || "";
   const name = step.name || "the road";
 
+  let instruction = "";
   const instructions: Record<string, string> = {
     depart: `Start on ${name}`,
     arrive: `Arrive at your destination`,
@@ -149,7 +199,53 @@ function parseInstruction(step: { maneuver: { type: string; modifier?: string };
     notification: `Note: ${name}`,
   };
 
-  return instructions[type] || `Continue on ${name}`;
+  instruction = instructions[type] || `Continue on ${name}`;
+
+  return {
+    instruction,
+    distance: 0,
+    duration: 0,
+  };
+}
+
+// Generate transit-specific instructions
+function generateTransitSteps(distance: number): RouteStep[] {
+  const steps: RouteStep[] = [];
+  
+  // Simulate transit journey with realistic Bangkok transit
+  const nearestLine = TRANSIT_LINES[Math.floor(Math.random() * TRANSIT_LINES.length)];
+  const startStation = nearestLine.stations[0];
+  const endStation = nearestLine.stations[Math.min(1, nearestLine.stations.length - 1)];
+  
+  steps.push({
+    instruction: `Walk to ${startStation} BTS/MRT Station`,
+    distance: Math.min(300, distance * 0.2),
+    duration: Math.min(300, distance * 0.2) / 1.2, // Walking speed ~1.2 m/s
+  });
+
+  steps.push({
+    instruction: `Board ${nearestLine.name}`,
+    distance: 0,
+    duration: 180, // 3 min wait time
+    transitLine: nearestLine.name,
+    transitColor: nearestLine.color,
+  });
+
+  steps.push({
+    instruction: `Ride to ${endStation} Station`,
+    distance: distance * 0.6,
+    duration: (distance * 0.6) / 15, // Train speed ~15 m/s (54 km/h)
+    transitLine: nearestLine.name,
+    transitColor: nearestLine.color,
+  });
+
+  steps.push({
+    instruction: `Exit at ${endStation} and walk to destination`,
+    distance: distance * 0.2,
+    duration: (distance * 0.2) / 1.2,
+  });
+
+  return steps;
 }
 
 export default function MapContent({
@@ -169,9 +265,10 @@ export default function MapContent({
   const markersRef = useRef<Record<string, L.Marker>>({});
   const landmarkMarkersRef = useRef<Record<string, L.Marker>>({});
   const userMarkerRef = useRef<L.Marker | null>(null);
+  const navMarkerRef = useRef<L.Marker | null>(null);
   const routeLayerRef = useRef<L.Polyline | null>(null);
 
-  const [mapCenter, setMapCenter] = useState<[number, number]>([13.742, 100.5272]);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([BANTADTHONG_CENTER.lat, BANTADTHONG_CENTER.lng]);
   const [selectedRestaurant, setSelectedRestaurant] = useState<RestaurantCard | null>(null);
   const [selectedLandmark, setSelectedLandmark] = useState<typeof mockLandmarksExpanded[0] | null>(null);
   const [userPos, setUserPos] = useState<{ lat: number; lng: number } | null>(userLocation || null);
@@ -180,6 +277,12 @@ export default function MapContent({
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
+  
+  // Navigation state
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [navPosition, setNavPosition] = useState<[number, number] | null>(null);
+  const navIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Find selected restaurant from props
   useEffect(() => {
@@ -207,15 +310,14 @@ export default function MapContent({
     setMapCenter([l.lat, l.lng]);
   }, [selectedLandmarkId]);
 
-  // Determine user location (or default)
-  useEffect(() => {
-    if (userLocation) {
-      setUserPos(userLocation);
-      return;
-    }
-
+  // Get user's actual location
+  const requestUserLocation = useCallback(() => {
     if (!navigator.geolocation) {
-      setUserPos({ lat: 13.7415, lng: 100.5265 });
+      toast({
+        title: "Location not supported",
+        description: "Your browser doesn't support geolocation. Using Bantadthong center.",
+      });
+      setUserPos(BANTADTHONG_CENTER);
       return;
     }
 
@@ -223,17 +325,48 @@ export default function MapContent({
       (pos) => {
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
+        
+        // Check if within Bangkok area
         if (lat > 13.5 && lat < 14.0 && lng > 100.3 && lng < 100.8) {
           setUserPos({ lat, lng });
+          setMapCenter([lat, lng]);
+          toast({
+            title: "📍 Location found",
+            description: "Using your current location",
+          });
         } else {
-          setUserPos({ lat: 13.7415, lng: 100.5265 });
+          // User is outside Bangkok, use Bantadthong center
+          setUserPos(BANTADTHONG_CENTER);
+          setMapCenter([BANTADTHONG_CENTER.lat, BANTADTHONG_CENTER.lng]);
+          toast({
+            title: "Location outside Bantadthong",
+            description: "Using Bantadthong center as your location",
+          });
         }
       },
-      () => setUserPos({ lat: 13.7415, lng: 100.5265 })
+      (error) => {
+        console.error("Geolocation error:", error);
+        setUserPos(BANTADTHONG_CENTER);
+        toast({
+          title: "Could not get location",
+          description: "Using Bantadthong center. Please enable location access.",
+          variant: "destructive",
+        });
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     );
-  }, [userLocation]);
+  }, [toast]);
 
-  // Fetch route from OSRM
+  // Initial location request
+  useEffect(() => {
+    if (userLocation) {
+      setUserPos(userLocation);
+      return;
+    }
+    requestUserLocation();
+  }, [userLocation, requestUserLocation]);
+
+  // Fetch route from OSRM with realistic timing
   const fetchRoute = useCallback(async (
     start: { lat: number; lng: number },
     end: { lat: number; lng: number },
@@ -241,8 +374,8 @@ export default function MapContent({
   ) => {
     setIsLoadingRoute(true);
     try {
-      // OSRM profile mapping
-      const profile = mode === "car" ? "driving" : mode === "transit" ? "driving" : "foot";
+      // OSRM only supports foot and car profiles
+      const profile = mode === "car" ? "driving" : "foot";
       
       const url = `https://router.project-osrm.org/route/v1/${profile}/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson&steps=true`;
       
@@ -258,28 +391,51 @@ export default function MapContent({
         (coord: [number, number]) => [coord[1], coord[0]] // Swap for Leaflet [lat, lng]
       );
 
-      // Adjust duration for transit (simulated - add 10% for waiting times)
       let duration = route.duration;
-      if (mode === "transit") {
-        duration = duration * 1.1;
-      }
+      let steps: RouteStep[] = [];
 
-      const steps: RouteStep[] = route.legs[0].steps.map((step: {
-        maneuver: { type: string; modifier?: string };
-        name?: string;
-        distance: number;
-        duration: number;
-      }) => ({
-        instruction: parseInstruction(step),
-        distance: step.distance,
-        duration: step.duration,
-      }));
+      if (mode === "foot") {
+        // Walking: ~4.5 km/h = 1.25 m/s (realistic walking speed)
+        // OSRM assumes ~5 km/h, so we adjust slightly slower for realistic walking
+        duration = route.distance / 1.1; // ~4 km/h realistic walking
+        
+        steps = route.legs[0].steps.map((step: {
+          maneuver: { type: string; modifier?: string };
+          name?: string;
+          distance: number;
+          duration: number;
+        }) => ({
+          ...parseInstruction(step, mode),
+          distance: step.distance,
+          duration: step.distance / 1.1, // Recalculate with walking speed
+        }));
+      } else if (mode === "car") {
+        // Driving in Bangkok traffic: assume average 20-25 km/h in city
+        // OSRM might be optimistic, so we use the given duration
+        duration = route.duration;
+        
+        steps = route.legs[0].steps.map((step: {
+          maneuver: { type: string; modifier?: string };
+          name?: string;
+          distance: number;
+          duration: number;
+        }) => ({
+          ...parseInstruction(step, mode),
+          distance: step.distance,
+          duration: step.duration,
+        }));
+      } else if (mode === "transit") {
+        // Transit: Generate realistic BTS/MRT instructions
+        steps = generateTransitSteps(route.distance);
+        duration = steps.reduce((sum, step) => sum + step.duration, 0);
+      }
 
       setRouteInfo({
         distance: route.distance,
         duration: duration,
         coordinates,
         steps,
+        transitLines: mode === "transit" ? steps.filter(s => s.transitLine).map(s => s.transitLine!) : undefined,
       });
     } catch (error) {
       console.error("Error fetching route:", error);
@@ -347,7 +503,6 @@ export default function MapContent({
 
     allRestaurants.forEach((r) => {
       if (markersRef.current[r.id]) {
-        // Update icon
         markersRef.current[r.id].setIcon(createRestaurantIcon(selectedRestaurant?.id === r.id, r.waitTime));
         return;
       }
@@ -429,7 +584,6 @@ export default function MapContent({
     const map = mapRef.current;
     if (!map) return;
 
-    // Remove old route
     if (routeLayerRef.current) {
       routeLayerRef.current.remove();
       routeLayerRef.current = null;
@@ -445,17 +599,100 @@ export default function MapContent({
       opacity: 0.8,
     }).addTo(map);
 
-    // Fit bounds to show entire route
     map.fitBounds(routeLayerRef.current.getBounds(), { padding: [50, 50] });
   }, [routeInfo, transportMode]);
 
-  const handleStartNavigation = () => {
-    const destination = selectedRestaurant || selectedLandmark;
-    if (!destination) return;
+  // Navigation simulation
+  useEffect(() => {
+    if (!isNavigating || !routeInfo || routeInfo.coordinates.length === 0) {
+      if (navIntervalRef.current) {
+        clearInterval(navIntervalRef.current);
+        navIntervalRef.current = null;
+      }
+      return;
+    }
+
+    let coordIndex = 0;
+    const coords = routeInfo.coordinates;
     
-    // Open in Google Maps for actual navigation
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${destination.lat},${destination.lng}&travelmode=${transportMode === "foot" ? "walking" : transportMode === "car" ? "driving" : "transit"}`;
-    window.open(url, "_blank");
+    // Speed based on transport mode
+    const intervalMs = transportMode === "car" ? 100 : transportMode === "transit" ? 150 : 300;
+
+    navIntervalRef.current = setInterval(() => {
+      if (coordIndex >= coords.length) {
+        setIsNavigating(false);
+        toast({
+          title: "🎉 You've arrived!",
+          description: `Welcome to ${(selectedRestaurant || selectedLandmark)?.name}`,
+        });
+        return;
+      }
+
+      const pos = coords[coordIndex];
+      setNavPosition(pos);
+      
+      // Update step index based on distance traveled
+      if (routeInfo.steps.length > 0) {
+        const progress = coordIndex / coords.length;
+        const stepIndex = Math.min(
+          Math.floor(progress * routeInfo.steps.length),
+          routeInfo.steps.length - 1
+        );
+        setCurrentStepIndex(stepIndex);
+      }
+
+      coordIndex++;
+    }, intervalMs);
+
+    return () => {
+      if (navIntervalRef.current) {
+        clearInterval(navIntervalRef.current);
+      }
+    };
+  }, [isNavigating, routeInfo, transportMode, selectedRestaurant, selectedLandmark, toast]);
+
+  // Update navigation marker
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (!navPosition || !isNavigating) {
+      if (navMarkerRef.current) {
+        navMarkerRef.current.remove();
+        navMarkerRef.current = null;
+      }
+      return;
+    }
+
+    if (!navMarkerRef.current) {
+      navMarkerRef.current = L.marker(navPosition, { icon: createNavigationIcon() }).addTo(map);
+    } else {
+      navMarkerRef.current.setLatLng(navPosition);
+    }
+
+    // Center map on navigation marker
+    map.panTo(navPosition);
+  }, [navPosition, isNavigating]);
+
+  const handleStartNavigation = () => {
+    if (!routeInfo) return;
+    setIsNavigating(true);
+    setCurrentStepIndex(0);
+    setShowSteps(true);
+    toast({
+      title: "🧭 Navigation started",
+      description: `Follow the route to ${(selectedRestaurant || selectedLandmark)?.name}`,
+    });
+  };
+
+  const handlePauseNavigation = () => {
+    setIsNavigating(false);
+  };
+
+  const handleResetNavigation = () => {
+    setIsNavigating(false);
+    setCurrentStepIndex(0);
+    setNavPosition(null);
   };
 
   const currentDestination = selectedRestaurant || selectedLandmark;
@@ -473,6 +710,17 @@ export default function MapContent({
           <X className="h-4 w-4" />
         </Button>
       )}
+
+      {/* Locate me button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={requestUserLocation}
+        className="absolute top-3 right-14 z-[1000] bg-background/90 backdrop-blur-sm hover:bg-background"
+        aria-label="Find my location"
+      >
+        <Locate className="h-4 w-4" />
+      </Button>
 
       <div ref={mapElRef} className="flex-1" style={{ minHeight: "300px" }} />
 
@@ -498,9 +746,35 @@ export default function MapContent({
         )}
       </div>
 
+      {/* Current step indicator during navigation */}
+      {isNavigating && routeInfo && routeInfo.steps[currentStepIndex] && (
+        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-[1000] bg-primary text-primary-foreground px-4 py-3 rounded-xl shadow-lg max-w-[90%]">
+          <div className="flex items-center gap-3">
+            {routeInfo.steps[currentStepIndex].transitLine ? (
+              <div 
+                className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                style={{ backgroundColor: routeInfo.steps[currentStepIndex].transitColor }}
+              >
+                <Bus className="h-4 w-4" />
+              </div>
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-primary-foreground/20 flex items-center justify-center">
+                {transportMode === "foot" ? <Footprints className="h-4 w-4" /> : <Car className="h-4 w-4" />}
+              </div>
+            )}
+            <div>
+              <p className="font-medium text-sm">{routeInfo.steps[currentStepIndex].instruction}</p>
+              {routeInfo.steps[currentStepIndex].transitLine && (
+                <p className="text-xs opacity-80">{routeInfo.steps[currentStepIndex].transitLine}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Route Panel */}
       {currentDestination && showRoute && (
-        <div className="bg-background/95 backdrop-blur-sm border-t border-border p-4 space-y-4">
+        <div className="bg-background/95 backdrop-blur-sm border-t border-border p-4 space-y-4 max-h-[60vh] overflow-y-auto">
           {/* Destination Info */}
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
@@ -524,11 +798,13 @@ export default function MapContent({
               <button
                 key={mode}
                 onClick={() => setTransportMode(mode)}
+                disabled={isNavigating}
                 className={cn(
                   "flex-1 p-3 rounded-xl border transition-all",
                   transportMode === mode
                     ? "border-primary bg-primary/10"
-                    : "border-border bg-card hover:bg-muted"
+                    : "border-border bg-card hover:bg-muted",
+                  isNavigating && "opacity-50 cursor-not-allowed"
                 )}
               >
                 <Icon className={cn(
@@ -575,16 +851,51 @@ export default function MapContent({
                 </Button>
               </div>
 
+              {/* Transit line badges */}
+              {transportMode === "transit" && routeInfo.transitLines && routeInfo.transitLines.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {routeInfo.transitLines.map((line, i) => {
+                    const lineInfo = TRANSIT_LINES.find(l => l.name === line);
+                    return (
+                      <span 
+                        key={i} 
+                        className="px-2 py-1 rounded-full text-xs text-white font-medium"
+                        style={{ backgroundColor: lineInfo?.color || "#666" }}
+                      >
+                        {line}
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+
               {/* Turn-by-turn Directions */}
               {showSteps && routeInfo.steps.length > 0 && (
                 <div className="space-y-2 max-h-48 overflow-y-auto border-t border-border pt-3">
                   {routeInfo.steps.map((step, index) => (
-                    <div key={index} className="flex items-start gap-3 text-sm">
-                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center flex-shrink-0 text-xs font-medium">
-                        {index + 1}
+                    <div 
+                      key={index} 
+                      className={cn(
+                        "flex items-start gap-3 text-sm p-2 rounded-lg transition-colors",
+                        isNavigating && index === currentStepIndex && "bg-primary/10 border border-primary/20"
+                      )}
+                    >
+                      <div 
+                        className={cn(
+                          "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium",
+                          step.transitLine ? "text-white" : "bg-muted"
+                        )}
+                        style={step.transitColor ? { backgroundColor: step.transitColor } : undefined}
+                      >
+                        {step.transitLine ? <Bus className="h-3 w-3" /> : index + 1}
                       </div>
                       <div className="flex-1">
                         <p>{step.instruction}</p>
+                        {step.transitLine && (
+                          <p className="text-xs font-medium mt-0.5" style={{ color: step.transitColor }}>
+                            {step.transitLine}
+                          </p>
+                        )}
                         <p className="text-xs text-muted-foreground">
                           {formatDistance(step.distance)} • {formatDuration(step.duration)}
                         </p>
@@ -596,15 +907,37 @@ export default function MapContent({
             </div>
           )}
 
-          {/* Start Navigation Button */}
-          <Button 
-            onClick={handleStartNavigation} 
-            className="w-full"
-            disabled={!routeInfo}
-          >
-            <Navigation className="h-4 w-4 mr-2" />
-            Start Navigation
-          </Button>
+          {/* Navigation Controls */}
+          <div className="flex gap-2">
+            {!isNavigating ? (
+              <Button 
+                onClick={handleStartNavigation} 
+                className="flex-1"
+                disabled={!routeInfo}
+              >
+                <Play className="h-4 w-4 mr-2" />
+                Start Navigation
+              </Button>
+            ) : (
+              <>
+                <Button 
+                  onClick={handlePauseNavigation}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <Pause className="h-4 w-4 mr-2" />
+                  Pause
+                </Button>
+                <Button 
+                  onClick={handleResetNavigation}
+                  variant="outline"
+                  size="icon"
+                >
+                  <RotateCcw className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       )}
 
