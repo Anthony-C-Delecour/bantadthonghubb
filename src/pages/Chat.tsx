@@ -3,8 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { ChatInterface } from "@/components/chat/ChatInterface";
 import { LiveNotifications } from "@/components/chat/LiveNotification";
+import { BantadthongMap } from "@/components/chat/BantadthongMap";
+import { PolaroidMode } from "@/components/chat/PolaroidMode";
+import { ItineraryMode } from "@/components/chat/ItineraryMode";
 import { useChat } from "@/hooks/useChat";
 import { useToast } from "@/hooks/use-toast";
+import { mockRestaurants } from "@/data/mockData";
+import { RestaurantCard } from "@/types/chat";
+import { cn } from "@/lib/utils";
 
 export default function Chat() {
   const navigate = useNavigate();
@@ -12,6 +18,8 @@ export default function Chat() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [selectedRestaurantId, setSelectedRestaurantId] = useState<string | null>(null);
+  const [showMap, setShowMap] = useState(false);
 
   const {
     sessions,
@@ -49,12 +57,10 @@ export default function Chat() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Only create initial session on first mount, not when all sessions are deleted
+  // Only create initial session on first mount
   useEffect(() => {
-    // Only auto-create on initial load if no sessions exist
     const isInitialLoad = sessions.length === 0 && !currentSessionId;
     if (isInitialLoad) {
-      // Check if this is truly first load (no user interaction yet)
       const hasUserInteracted = sessionStorage.getItem("hubb_user_interacted");
       if (!hasUserInteracted) {
         createNewSession();
@@ -65,6 +71,7 @@ export default function Chat() {
 
   const handleLogout = () => {
     localStorage.removeItem("hubb_user");
+    sessionStorage.removeItem("hubb_user_interacted");
     toast({
       title: "Signed out",
       description: "See you next time!",
@@ -91,6 +98,129 @@ export default function Chat() {
       setShowMobileSidebar(!showMobileSidebar);
     } else {
       setIsSidebarCollapsed(!isSidebarCollapsed);
+    }
+  };
+
+  const handleRestaurantClick = (restaurantId: string) => {
+    setSelectedRestaurantId(restaurantId);
+    setShowMap(true);
+    const restaurant = mockRestaurants.find(r => r.id === restaurantId);
+    if (restaurant) {
+      toast({
+        title: `📍 ${restaurant.name}`,
+        description: `${restaurant.waitTime} min wait • ${restaurant.distance} away`,
+      });
+    }
+  };
+
+  const handleMapRestaurantSelect = (restaurant: RestaurantCard) => {
+    setSelectedRestaurantId(restaurant.id);
+  };
+
+  // Render mode-specific content
+  const renderModeContent = () => {
+    switch (currentMode) {
+      case "polaroid":
+        return (
+          <div className="flex-1 flex flex-col overflow-y-auto">
+            <PolaroidMode />
+          </div>
+        );
+      case "itinerary":
+        return (
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+            <div className="lg:w-1/2 overflow-y-auto border-r border-border">
+              <ItineraryMode 
+                onSelectRestaurant={handleRestaurantClick}
+              />
+            </div>
+            <div className="lg:w-1/2 h-64 lg:h-full">
+              <BantadthongMap
+                selectedRestaurantId={selectedRestaurantId}
+                onRestaurantSelect={handleMapRestaurantSelect}
+                showRoute={true}
+                className="h-full rounded-none"
+              />
+            </div>
+          </div>
+        );
+      case "landmark":
+        return (
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+            <div className="lg:w-1/2 overflow-y-auto">
+              <ChatInterface
+                session={currentSession}
+                isLoading={isLoading}
+                currentMode={currentMode}
+                onSendMessage={sendMessage}
+                onNewChat={handleNewChat}
+                onToggleSidebar={handleToggleSidebar}
+                onLogout={handleLogout}
+                onRestaurantClick={handleRestaurantClick}
+                isSidebarCollapsed={isSidebarCollapsed}
+              />
+            </div>
+            <div className="lg:w-1/2 h-64 lg:h-full border-l border-border">
+              <BantadthongMap
+                selectedRestaurantId={selectedRestaurantId}
+                onRestaurantSelect={handleMapRestaurantSelect}
+                showRoute={true}
+                className="h-full rounded-none"
+              />
+            </div>
+          </div>
+        );
+      default:
+        // Chat mode - show map as overlay when restaurant is selected
+        return (
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+            <div className={cn(
+              "flex-1 flex flex-col",
+              showMap && !isMobile && "lg:w-1/2"
+            )}>
+              <ChatInterface
+                session={currentSession}
+                isLoading={isLoading}
+                currentMode={currentMode}
+                onSendMessage={sendMessage}
+                onNewChat={handleNewChat}
+                onToggleSidebar={handleToggleSidebar}
+                onLogout={handleLogout}
+                onRestaurantClick={handleRestaurantClick}
+                isSidebarCollapsed={isSidebarCollapsed}
+              />
+            </div>
+            
+            {/* Map Panel */}
+            {showMap && (
+              <>
+                {/* Mobile: Full screen overlay */}
+                {isMobile ? (
+                  <div className="fixed inset-0 z-50 bg-background">
+                    <BantadthongMap
+                      selectedRestaurantId={selectedRestaurantId}
+                      onRestaurantSelect={handleMapRestaurantSelect}
+                      showRoute={true}
+                      onClose={() => setShowMap(false)}
+                      className="h-full rounded-none"
+                    />
+                  </div>
+                ) : (
+                  /* Desktop: Side panel */
+                  <div className="lg:w-1/2 h-full border-l border-border animate-fade-in">
+                    <BantadthongMap
+                      selectedRestaurantId={selectedRestaurantId}
+                      onRestaurantSelect={handleMapRestaurantSelect}
+                      showRoute={true}
+                      onClose={() => setShowMap(false)}
+                      className="h-full rounded-none"
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        );
     }
   };
 
@@ -124,17 +254,8 @@ export default function Chat() {
         />
       </div>
 
-      {/* Main Chat Area */}
-      <ChatInterface
-        session={currentSession}
-        isLoading={isLoading}
-        currentMode={currentMode}
-        onSendMessage={sendMessage}
-        onNewChat={handleNewChat}
-        onToggleSidebar={handleToggleSidebar}
-        onLogout={handleLogout}
-        isSidebarCollapsed={isSidebarCollapsed}
-      />
+      {/* Main Content Area */}
+      {renderModeContent()}
 
       {/* Live Notifications */}
       <LiveNotifications />

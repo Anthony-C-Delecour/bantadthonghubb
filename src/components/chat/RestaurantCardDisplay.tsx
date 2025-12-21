@@ -1,5 +1,5 @@
 import { RestaurantCard } from "@/types/chat";
-import { Star, Clock, MapPin, Users } from "lucide-react";
+import { Star, Clock, MapPin, Users, Navigation } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface RestaurantCardDisplayProps {
@@ -14,7 +14,11 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
   return (
     <div 
       onClick={onClick}
-      className={cn("restaurant-card group", className)}
+      className={cn(
+        "restaurant-card group cursor-pointer",
+        "bg-card border border-border rounded-2xl p-4 hover:shadow-lg transition-all duration-300",
+        className
+      )}
     >
       {/* Image */}
       <div className="relative h-36 -mx-4 -mt-4 mb-3 overflow-hidden rounded-t-2xl">
@@ -30,7 +34,7 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
           <span className="text-xs text-muted-foreground">({restaurant.reviewCount})</span>
         </div>
         <div className="absolute bottom-2 right-3 bg-background/90 backdrop-blur-sm px-2 py-1 rounded-full">
-          <span className="text-xs font-medium">{restaurant.priceRange}</span>
+          <span className="text-xs font-medium">{restaurant.bahtTier || restaurant.priceRange}</span>
         </div>
       </div>
 
@@ -80,9 +84,9 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
           </div>
         </div>
 
-        {/* Known For Tags */}
+        {/* Signature Dishes / Known For */}
         <div className="flex flex-wrap gap-1.5 pt-1">
-          {restaurant.knownFor.slice(0, 3).map((item) => (
+          {(restaurant.signatureDishes || restaurant.knownFor).slice(0, 3).map((item) => (
             <span 
               key={item}
               className="text-[10px] bg-secondary text-secondary-foreground px-2 py-0.5 rounded-full"
@@ -90,6 +94,12 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
               {item}
             </span>
           ))}
+        </div>
+
+        {/* Click hint */}
+        <div className="flex items-center gap-1 text-xs text-primary opacity-0 group-hover:opacity-100 transition-opacity pt-1">
+          <Navigation className="h-3 w-3" />
+          <span>Click to view on map</span>
         </div>
       </div>
     </div>
