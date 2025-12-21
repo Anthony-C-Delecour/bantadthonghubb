@@ -12,10 +12,12 @@ import { useToast } from "@/hooks/use-toast";
 import { mockRestaurants } from "@/data/mockData";
 import { RestaurantCard } from "@/types/chat";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Chat() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
@@ -75,8 +77,8 @@ export default function Chat() {
     localStorage.removeItem("hubb_user");
     sessionStorage.removeItem("hubb_user_interacted");
     toast({
-      title: "Signed out",
-      description: "See you next time!",
+      title: t("signedOut"),
+      description: t("seeYouNextTime"),
     });
     navigate("/");
   };
@@ -110,7 +112,7 @@ export default function Chat() {
     if (restaurant) {
       toast({
         title: `📍 ${restaurant.name}`,
-        description: `${restaurant.waitTime} min wait • ${restaurant.distance} away`,
+        description: `${restaurant.waitTime} ${t("minWait")} • ${restaurant.distance} ${t("away")}`,
       });
     }
   };

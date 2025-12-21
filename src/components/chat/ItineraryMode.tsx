@@ -14,6 +14,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, DollarSign, Route, X, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ItineraryModeProps {
   onSelectRestaurant?: (restaurantId: string) => void;
@@ -28,6 +29,7 @@ interface ItineraryStop {
 }
 
 export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProps) {
+  const { t } = useLanguage();
   const [budget, setBudget] = useState<"low" | "mid" | "high">("mid");
   const [numPlaces, setNumPlaces] = useState(3);
   const [cuisine, setCuisine] = useState<string>("any");
@@ -120,13 +122,19 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
     return itinerary.reduce((sum, stop) => sum + stop.estimatedWait, 0);
   }, [itinerary]);
 
+  const budgetOptions = [
+    { value: "low", label: t("budgetLow"), desc: t("underPrice") },
+    { value: "mid", label: t("budgetMid"), desc: t("midPrice") },
+    { value: "high", label: t("budgetHigh"), desc: t("highPrice") },
+  ];
+
   return (
     <div className="p-4 max-w-lg mx-auto">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-xl font-semibold">Itinerary Planner 🗺️</h2>
+          <h2 className="text-xl font-semibold">{t("itineraryPlanner")}</h2>
           <p className="text-sm text-muted-foreground">
-            Plan your perfect Bantadthong food tour
+            {t("planBantadthongTour")}
           </p>
         </div>
         {onClose && (
@@ -140,13 +148,9 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
         <div className="space-y-4">
           {/* Budget */}
           <div className="space-y-2">
-            <Label>Budget Level</Label>
+            <Label>{t("budgetLevel")}</Label>
             <div className="flex gap-2">
-              {[
-                { value: "low", label: "฿ Budget", desc: "Under 400 THB" },
-                { value: "mid", label: "฿฿ Mid", desc: "400-700 THB" },
-                { value: "high", label: "฿฿฿ Premium", desc: "700+ THB" },
-              ].map((option) => (
+              {budgetOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => setBudget(option.value as typeof budget)}
@@ -168,7 +172,7 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
 
           {/* Number of Places */}
           <div className="space-y-2">
-            <Label>Number of Places</Label>
+            <Label>{t("numberOfPlaces")}</Label>
             <div className="flex gap-2">
               {[2, 3, 4, 5].map((num) => (
                 <button
@@ -189,13 +193,13 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
 
           {/* Cuisine Preference */}
           <div className="space-y-2">
-            <Label>Cuisine Preference</Label>
+            <Label>{t("cuisinePreference")}</Label>
             <Select value={cuisine} onValueChange={setCuisine}>
               <SelectTrigger>
-                <SelectValue placeholder="Select cuisine" />
+                <SelectValue placeholder={t("cuisinePreference")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="any">Any Cuisine</SelectItem>
+                <SelectItem value="any">{t("anyCuisine")}</SelectItem>
                 {cuisineOptions.map((c) => (
                   <SelectItem key={c} value={c.toLowerCase()}>
                     {c}
@@ -207,7 +211,7 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
 
           <Button onClick={generateItinerary} className="w-full" size="lg">
             <Route className="h-4 w-4 mr-2" />
-            Generate Itinerary
+            {t("generateItinerary")}
           </Button>
         </div>
       ) : (
@@ -215,15 +219,15 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
           {/* Summary */}
           <div className="flex gap-4 p-3 bg-secondary rounded-xl">
             <div className="flex-1 text-center">
-              <div className="text-sm text-muted-foreground">Est. Budget</div>
+              <div className="text-sm text-muted-foreground">{t("estBudget")}</div>
               <div className="font-semibold">~{Math.round(totalBudget)} THB</div>
             </div>
             <div className="flex-1 text-center border-x border-border">
-              <div className="text-sm text-muted-foreground">Total Wait</div>
+              <div className="text-sm text-muted-foreground">{t("totalWait")}</div>
               <div className="font-semibold">~{totalWait} min</div>
             </div>
             <div className="flex-1 text-center">
-              <div className="text-sm text-muted-foreground">Stops</div>
+              <div className="text-sm text-muted-foreground">{t("stops")}</div>
               <div className="font-semibold">{itinerary.length}</div>
             </div>
           </div>
@@ -264,7 +268,7 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
                   <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
-                      {stop.estimatedWait} min wait
+                      {stop.estimatedWait} {t("minWait")}
                     </span>
                     <span className="flex items-center gap-1">
                       <DollarSign className="h-3 w-3" />
@@ -297,13 +301,13 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
               onClick={() => setIsGenerated(false)}
               className="flex-1"
             >
-              Edit Preferences
+              {t("editPreferences")}
             </Button>
             <Button
               onClick={() => itinerary[0] && onSelectRestaurant && onSelectRestaurant(itinerary[0].restaurant.id)}
               className="flex-1"
             >
-              View on Map
+              {t("viewOnMap")}
               <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
           </div>
