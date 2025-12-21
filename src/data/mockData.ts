@@ -932,30 +932,6 @@ export const allRestaurants = [...mockRestaurants, ...additionalRestaurants];
 // Expanded landmarks with reviews - focused on Bantadthong area
 export const mockLandmarksExpanded = [
   {
-    id: "1",
-    name: "Chulalongkorn University Main Gate",
-    description: "The iconic main entrance of Thailand's oldest university. Features stunning colonial architecture and the beautiful Maha Chulalongkorn Building visible from Bantadthong Road.",
-    image: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&h=600&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=400&fit=crop"
-    ],
-    rating: 4.9,
-    reviewCount: 3452,
-    reviews: [
-      { id: "r1", userName: "Sarah M.", rating: 5, comment: "Absolutely stunning campus! The architecture is breathtaking and the gardens are so peaceful.", date: "2024-01-15", helpful: 42 },
-      { id: "r2", userName: "Tom K.", rating: 5, comment: "One of the most beautiful universities I've ever seen. Perfect for photography.", date: "2024-01-10", helpful: 28 },
-      { id: "r3", userName: "Lisa W.", rating: 4, comment: "Great place to walk around. The main building is gorgeous.", date: "2024-01-05", helpful: 15 },
-    ],
-    instagramHashtag: "#ChulaUniversity",
-    lat: 13.7405,
-    lng: 100.5280,
-    address: "Bantadthong Road, Pathumwan",
-    category: "University",
-    bestTimeToVisit: "Morning",
-    estimatedVisitTime: "2-3 hours",
-  },
-  {
     id: "2",
     name: "Chula Night Market",
     description: "Popular evening street food market near Chulalongkorn University. Offers affordable Thai dishes, desserts, and local snacks loved by students.",
@@ -1004,31 +980,6 @@ export const mockLandmarksExpanded = [
     category: "Park",
     bestTimeToVisit: "Morning",
     estimatedVisitTime: "30-60 min",
-  },
-  {
-    id: "4",
-    name: "Faculty of Arts Building",
-    description: "Historic colonial-era building with beautiful architecture. Popular photo spot featuring European-style design and lush gardens.",
-    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&h=600&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=400&fit=crop",
-      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?w=400&h=400&fit=crop"
-    ],
-    rating: 4.5,
-    reviewCount: 876,
-    reviews: [
-      { id: "r10", userName: "Chris B.", rating: 5, comment: "Such beautiful architecture! Feels like stepping back in time.", date: "2024-01-09", helpful: 25 },
-      { id: "r11", userName: "Jenny T.", rating: 4, comment: "Great for Instagram photos. The building is stunning.", date: "2024-01-07", helpful: 18 },
-      { id: "r12", userName: "Mark H.", rating: 5, comment: "Historic gem with gorgeous colonial design.", date: "2024-01-03", helpful: 14 },
-    ],
-    instagramHashtag: "#ChulaArts",
-    lat: 13.7412,
-    lng: 100.5310,
-    address: "Phaya Thai Rd, Bantadthong",
-    category: "University",
-    bestTimeToVisit: "Morning",
-    estimatedVisitTime: "30-45 min",
   },
   {
     id: "5",
