@@ -45,6 +45,26 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
     return Array.from(cuisines);
   }, []);
 
+  const translateCuisine = (cuisineName: string): string => {
+    const key = cuisineName.toLowerCase();
+    const cuisineMap: Record<string, string> = {
+      thai: t("thai"),
+      isan: t("isan"),
+      chinese: t("chinese"),
+      japanese: t("japanese"),
+      korean: t("korean"),
+      seafood: t("seafood"),
+      noodles: t("noodles"),
+      western: t("western"),
+      indian: t("indian"),
+      vietnamese: t("vietnamese"),
+      cafe: t("cafe"),
+      northern: t("northern"),
+      southern: t("southern"),
+    };
+    return cuisineMap[key] || cuisineName;
+  };
+
   const generateItinerary = () => {
     let filtered = [...mockRestaurants];
 
@@ -202,7 +222,7 @@ export function ItineraryMode({ onSelectRestaurant, onClose }: ItineraryModeProp
                 <SelectItem value="any">{t("anyCuisine")}</SelectItem>
                 {cuisineOptions.map((c) => (
                   <SelectItem key={c} value={c.toLowerCase()}>
-                    {c}
+                    {translateCuisine(c)}
                   </SelectItem>
                 ))}
               </SelectContent>

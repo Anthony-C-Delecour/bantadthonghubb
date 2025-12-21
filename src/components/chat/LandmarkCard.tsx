@@ -38,6 +38,15 @@ interface LandmarkCardProps {
 
 export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProps) {
   const { t } = useLanguage();
+
+  const translateTimeOfDay = (time: string) => {
+    const lowerTime = time.toLowerCase();
+    if (lowerTime.includes("late afternoon")) return t("lateAfternoon");
+    if (lowerTime.includes("morning")) return t("morning");
+    if (lowerTime.includes("afternoon")) return t("afternoon");
+    if (lowerTime.includes("evening")) return t("evening");
+    return time;
+  };
   
   return (
     <div
@@ -92,7 +101,7 @@ export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProp
 
         <div className="flex items-center gap-2 text-xs">
           <span className="px-2 py-1 bg-muted rounded-full">
-            {t("bestTime")}: {landmark.bestTimeToVisit}
+            {t("bestTime")}: {translateTimeOfDay(landmark.bestTimeToVisit)}
           </span>
           <span className="px-2 py-1 bg-muted rounded-full">
             {t("estimatedTime")}{landmark.estimatedVisitTime}
