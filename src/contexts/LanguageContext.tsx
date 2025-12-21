@@ -1025,6 +1025,7 @@ interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: string) => string;
+  translateCuisine: (cuisine: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -1047,8 +1048,27 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     return translations[language][key] || translations.en[key] || key;
   };
 
+  // Helper function to translate compound cuisines like "Thai-Chinese", "Chinese-Thai"
+  const translateCuisine = (cuisine: string): string => {
+    // Handle compound cuisines with hyphens or spaces
+    const separators = ['-', ' '];
+    for (const sep of separators) {
+      if (cuisine.includes(sep)) {
+        const parts = cuisine.split(sep);
+        const translatedParts = parts.map(part => {
+          const key = part.toLowerCase().trim();
+          return translations[language][key] || translations.en[key] || part;
+        });
+        return translatedParts.join(sep === '-' ? '-' : ' ');
+      }
+    }
+    // Single cuisine
+    const key = cuisine.toLowerCase().trim();
+    return translations[language][key] || translations.en[key] || cuisine;
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, translateCuisine }}>
       {children}
     </LanguageContext.Provider>
   );

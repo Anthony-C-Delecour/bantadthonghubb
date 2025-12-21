@@ -11,7 +11,11 @@ interface RestaurantCardDisplayProps {
 
 export function RestaurantCardDisplay({ restaurant, onClick, className }: RestaurantCardDisplayProps) {
   const availabilityPercent = (restaurant.tablesAvailable / restaurant.totalTables) * 100;
-  const { t } = useLanguage();
+  const { t, translateCuisine } = useLanguage();
+
+  // Get all food images (main + additional)
+  const allImages = [restaurant.image, ...(restaurant.foodImages || [])].filter(Boolean);
+  const displayImages = allImages.slice(0, 4);
   
   return (
     <div 
@@ -22,7 +26,7 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
         className
       )}
     >
-      {/* Image */}
+      {/* Main Image */}
       <div className="relative h-36 -mx-4 -mt-4 mb-3 overflow-hidden rounded-t-2xl">
         <img 
           src={restaurant.image} 
@@ -40,13 +44,29 @@ export function RestaurantCardDisplay({ restaurant, onClick, className }: Restau
         </div>
       </div>
 
+      {/* Food Gallery - Shows additional food images */}
+      {displayImages.length > 1 && (
+        <div className="grid grid-cols-3 gap-1.5 mb-3">
+          {displayImages.slice(1, 4).map((img, index) => (
+            <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
+              <img
+                src={img}
+                alt={`${restaurant.name} food ${index + 1}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Content */}
       <div className="space-y-2">
         <div>
           <h3 className="font-semibold text-base group-hover:text-primary transition-colors">
             {restaurant.name}
           </h3>
-          <p className="text-sm text-muted-foreground">{restaurant.cuisine}</p>
+          <p className="text-sm text-muted-foreground">{translateCuisine(restaurant.cuisine)}</p>
         </div>
 
         {/* Stats Row */}
