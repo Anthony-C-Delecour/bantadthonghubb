@@ -26,6 +26,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "120m",
     distanceMeters: 120,
     image: "https://images.unsplash.com/photo-1569562211093-4ed0d0758f12?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Late Night", "Spicy", "Student Favorite"],
     signatureDishes: ["Tom Yum Mama Noodles", "Crispy Pork"],
     description: "Iconic late-night restaurant popular with students and tourists, known for indulgent spicy noodle bowls and generous toppings. Best visited after 8 PM.",
@@ -40,7 +45,7 @@ export const mockRestaurants: RestaurantCard[] = [
     name: "Phed Mark",
     rating: 4.8,
     reviewCount: 3421,
-    cuisine: "Thai (Isan)",
+    cuisine: "Thai-Isan",
     priceRange: "280–650 THB",
     priceMin: 280,
     priceMax: 650,
@@ -51,6 +56,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "85m",
     distanceMeters: 85,
     image: "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1562565651-7d4948f339eb?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Michelin Bib Gourmand", "Extremely Spicy", "Pad Kra Pao"],
     signatureDishes: ["Pad Kra Pao"],
     description: "Michelin Bib Gourmand restaurant specializing in intensely spicy, authentic pad kra pao with customizable heat levels.",
@@ -76,6 +86,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "200m",
     distanceMeters: 200,
     image: "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Premium Seafood", "Destination Restaurant", "Worth the Wait"],
     signatureDishes: ["Crab Fried Rice"],
     description: "Famous for massive crab portions and premium seafood. Considered a must-visit destination restaurant.",
@@ -101,6 +116,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "150m",
     distanceMeters: 150,
     image: "https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1552611052-33e04de081de?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1583835746434-cf1534674b41?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Quick Service", "Comfort Food", "Light Broth"],
     signatureDishes: ["Rolled Noodles", "Clear Soup"],
     description: "Comfort-focused noodle shop with light broth and fast turnover.",
@@ -126,6 +146,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "180m",
     distanceMeters: 180,
     image: "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Balanced Flavors", "Consistent Quality", "Isan Classics"],
     signatureDishes: ["Som Tum", "Grilled Chicken"],
     description: "Well-known Isan restaurant with balanced flavors and consistent quality.",
@@ -151,6 +176,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "220m",
     distanceMeters: 220,
     image: "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1547928578-bca3e9c5a0ab?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Creamy Curry", "Northern Specialties", "Rich Broth"],
     signatureDishes: ["Khao Soi"],
     description: "Creamy northern Thai curry noodles with rich coconut broth.",
@@ -176,6 +206,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "90m",
     distanceMeters: 90,
     image: "https://images.unsplash.com/photo-1552611052-33e04de081de?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1555126634-323283e090fa?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1583835746434-cf1534674b41?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Fast Service", "Student Budget", "No Wait"],
     signatureDishes: ["Beef Boat Noodles", "Pork Boat Noodles"],
     description: "Fast, casual noodle shop popular with students.",
@@ -201,6 +236,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "350m",
     distanceMeters: 350,
     image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Bold Flavors", "Southern Spices", "Premium"],
     signatureDishes: ["Southern Curry Dishes"],
     description: "Bold southern Thai flavors with heavy spice and herbs.",
@@ -226,6 +266,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "130m",
     distanceMeters: 130,
     image: "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1558030006-450675393462?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Smoky Flavor", "Quick Bites", "Casual"],
     signatureDishes: ["Grilled Pork Skewers"],
     description: "Smoky, sweet pork served quickly for casual dining.",
@@ -251,6 +296,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "175m",
     distanceMeters: 175,
     image: "https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1552611052-33e04de081de?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1583835746434-cf1534674b41?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Local Favorite", "Traditional", "Authentic"],
     signatureDishes: ["Boat Noodles"],
     description: "Traditional noodle shop with loyal local following.",
@@ -276,6 +326,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "280m",
     distanceMeters: 280,
     image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1558030006-450675393462?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Group Dining", "Interactive", "Fun Experience"],
     signatureDishes: ["Moo Kata"],
     description: "Group-friendly grill and hotpot dining experience.",
@@ -301,6 +356,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "165m",
     distanceMeters: 165,
     image: "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Bold Tom Yum", "Seafood Fresh", "Spicy"],
     signatureDishes: ["Tom Yum Seafood"],
     description: "Known for bold, sour-spicy tom yum broths.",
@@ -326,6 +386,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "195m",
     distanceMeters: 195,
     image: "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Strong Spice", "Casual Vibe", "Budget-Friendly"],
     signatureDishes: ["Papaya Salad"],
     description: "Casual Isan eatery with strong spice levels.",
@@ -351,6 +416,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "240m",
     distanceMeters: 240,
     image: "https://images.unsplash.com/photo-1579888944880-d98341245702?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Crispy Texture", "Seafood", "Famous"],
     signatureDishes: ["Crispy Oyster Omelette"],
     description: "Famous for crispy texture and rich seafood flavor.",
@@ -376,6 +446,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "110m",
     distanceMeters: 110,
     image: "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1569562211093-4ed0d0758f12?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Wok Hei", "Street Style", "Classic"],
     signatureDishes: ["Pad Thai"],
     description: "Smoky wok-fried pad thai with street-style flavor.",
@@ -401,6 +476,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "145m",
     distanceMeters: 145,
     image: "https://images.unsplash.com/photo-1552611052-33e04de081de?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1555126634-323283e090fa?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1583835746434-cf1534674b41?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Peppery Soup", "Comfort Food", "Aromatic"],
     signatureDishes: ["Peppery Rolled Noodles"],
     description: "Comforting soup with aromatic white pepper.",
@@ -415,7 +495,7 @@ export const mockRestaurants: RestaurantCard[] = [
     name: "Ban Suan Steak",
     rating: 4.5,
     reviewCount: 1567,
-    cuisine: "Western-Thai",
+    cuisine: "Western-Thai Fusion",
     priceRange: "380–750 THB",
     priceMin: 380,
     priceMax: 750,
@@ -426,6 +506,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "320m",
     distanceMeters: 320,
     image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1558030006-450675393462?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Fusion", "Western Food", "Casual Dining"],
     signatureDishes: ["Steak and Fusion Dishes"],
     description: "Casual western dining with Thai influence.",
@@ -451,6 +536,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "70m",
     distanceMeters: 70,
     image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1569562211093-4ed0d0758f12?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Student Favorite", "Fast", "Cheap Eats"],
     signatureDishes: ["Rice Dishes"],
     description: "Student favorite with fast service.",
@@ -476,6 +566,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "205m",
     distanceMeters: 205,
     image: "https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Extremely Spicy", "Lively", "Authentic Isan"],
     signatureDishes: ["Extremely Spicy Som Tum"],
     description: "Lively atmosphere with high spice intensity.",
@@ -501,6 +596,11 @@ export const mockRestaurants: RestaurantCard[] = [
     distance: "160m",
     distanceMeters: 160,
     image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1569562211093-4ed0d0758f12?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Late Night", "Comfort Food", "Reliable"],
     signatureDishes: ["Chicken Rice"],
     description: "Reliable late-night comfort food.",
@@ -513,7 +613,7 @@ export const mockRestaurants: RestaurantCard[] = [
 ];
 
 // Additional restaurants for variety
-export const additionalRestaurants = [
+export const additionalRestaurants: RestaurantCard[] = [
   {
     id: "21",
     name: "Mango Tree Bistro",
@@ -530,6 +630,11 @@ export const additionalRestaurants = [
     distance: "250m",
     distanceMeters: 250,
     image: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1569562211093-4ed0d0758f12?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Modern Thai", "Presentation", "Date Night"],
     signatureDishes: ["Mango Sticky Rice", "Green Curry Pasta"],
     description: "Modern Thai fusion with Instagram-worthy presentations.",
@@ -556,6 +661,11 @@ export const additionalRestaurants = [
     distance: "380m",
     distanceMeters: 380,
     image: "https://images.unsplash.com/photo-1559314809-0d155014e29e?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1569562211093-4ed0d0758f12?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Michelin Star", "Crab Curry", "Traditional"],
     signatureDishes: ["Crab Meat Curry", "Stir-fried Morning Glory"],
     description: "Michelin-starred restaurant famous for crab curry.",
@@ -582,6 +692,11 @@ export const additionalRestaurants = [
     distance: "145m",
     distanceMeters: 145,
     image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1558030006-450675393462?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Interactive", "Group Friendly", "Late Night"],
     signatureDishes: ["Thai Suki Set", "Glass Noodles"],
     description: "Interactive hot pot dining popular with students.",
@@ -608,6 +723,11 @@ export const additionalRestaurants = [
     distance: "420m",
     distanceMeters: 420,
     image: "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Michelin Star", "Celebrity Chef", "Worth the Wait"],
     signatureDishes: ["Crab Omelette", "Drunken Noodles"],
     description: "Legendary Michelin-starred street food by 'Jay Fai'.",
@@ -623,7 +743,7 @@ export const additionalRestaurants = [
     name: "Tealicious Cafe",
     rating: 4.4,
     reviewCount: 987,
-    cuisine: "Cafe & Desserts",
+    cuisine: "Cafe",
     priceRange: "150–350 THB",
     priceMin: 150,
     priceMax: 350,
@@ -634,6 +754,11 @@ export const additionalRestaurants = [
     distance: "95m",
     distanceMeters: 95,
     image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Bubble Tea", "Study Spot", "AC"],
     signatureDishes: ["Brown Sugar Boba", "Matcha Latte"],
     description: "Cozy cafe popular for studying and bubble tea.",
@@ -649,7 +774,7 @@ export const additionalRestaurants = [
     name: "Dim Sum Corner",
     rating: 4.6,
     reviewCount: 2134,
-    cuisine: "Cantonese",
+    cuisine: "Chinese",
     priceRange: "300–650 THB",
     priceMin: 300,
     priceMax: 650,
@@ -660,6 +785,11 @@ export const additionalRestaurants = [
     distance: "185m",
     distanceMeters: 185,
     image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1541767360-2f5182e4fd74?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Authentic Dim Sum", "Early Morning", "Yum Cha"],
     signatureDishes: ["Har Gow", "Siu Mai", "Char Siu Bao"],
     description: "Traditional Hong Kong style dim sum.",
@@ -686,6 +816,11 @@ export const additionalRestaurants = [
     distance: "310m",
     distanceMeters: 310,
     image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1558030006-450675393462?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1544025162-d76978fc6093?w=300&h=300&fit=crop"
+    ],
     knownFor: ["KBBQ", "Unlimited Meat", "Soju"],
     signatureDishes: ["Beef Bulgogi Set", "Samgyupsal"],
     description: "Unlimited Korean BBQ with quality meats.",
@@ -701,7 +836,7 @@ export const additionalRestaurants = [
     name: "Ramen Tei",
     rating: 4.7,
     reviewCount: 2876,
-    cuisine: "Japanese Ramen",
+    cuisine: "Japanese",
     priceRange: "280–480 THB",
     priceMin: 280,
     priceMax: 480,
@@ -712,6 +847,11 @@ export const additionalRestaurants = [
     distance: "175m",
     distanceMeters: 175,
     image: "https://images.unsplash.com/photo-1557872943-16a5ac26437e?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1583835746434-cf1534674b41?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1552611052-33e04de081de?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Rich Broth", "Chashu", "Late Night"],
     signatureDishes: ["Tonkotsu Ramen", "Spicy Miso Ramen"],
     description: "Authentic Japanese ramen with 18-hour broth.",
@@ -738,6 +878,11 @@ export const additionalRestaurants = [
     distance: "265m",
     distanceMeters: 265,
     image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1567337710282-00832b415979?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Butter Chicken", "Naan", "Vegetarian Options"],
     signatureDishes: ["Butter Chicken", "Garlic Naan", "Biryani"],
     description: "Authentic North Indian cuisine with tandoor oven.",
@@ -764,6 +909,11 @@ export const additionalRestaurants = [
     distance: "135m",
     distanceMeters: 135,
     image: "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=400&h=300&fit=crop",
+    foodImages: [
+      "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1555126634-323283e090fa?w=300&h=300&fit=crop",
+      "https://images.unsplash.com/photo-1583835746434-cf1534674b41?w=300&h=300&fit=crop"
+    ],
     knownFor: ["Fresh Herbs", "Light Broth", "Healthy"],
     signatureDishes: ["Pho Bo", "Banh Mi", "Spring Rolls"],
     description: "Fresh Vietnamese pho and banh mi.",
@@ -787,8 +937,9 @@ export const mockLandmarksExpanded = [
     description: "The iconic main entrance of Thailand's oldest university. Features stunning colonial architecture and the beautiful Maha Chulalongkorn Building visible from Bantadthong Road.",
     image: "https://images.unsplash.com/photo-1562774053-701939374585?w=800&h=600&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1562774053-701939374585?w=800",
-      "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800",
+      "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=400&h=400&fit=crop"
     ],
     rating: 4.9,
     reviewCount: 3452,
@@ -810,19 +961,24 @@ export const mockLandmarksExpanded = [
     name: "Chula Night Market",
     description: "Popular evening street food market near Chulalongkorn University. Offers affordable Thai dishes, desserts, and local snacks loved by students.",
     image: "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&h=600&fit=crop",
-    images: [],
+    images: [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1569562211093-4ed0d0758f12?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=400&fit=crop"
+    ],
     rating: 4.7,
     reviewCount: 2845,
     reviews: [
       { id: "r4", userName: "Mike J.", rating: 5, comment: "Great street food at student-friendly prices! Love the grilled pork skewers.", date: "2024-01-14", helpful: 35 },
       { id: "r5", userName: "Anna P.", rating: 4, comment: "Busy but worth it. Try the mango sticky rice here!", date: "2024-01-12", helpful: 22 },
+      { id: "r6", userName: "Kevin L.", rating: 5, comment: "Best night market in the area. So many options!", date: "2024-01-08", helpful: 18 },
     ],
     instagramHashtag: "#ChulaMarket",
     lat: 13.7418,
     lng: 100.5258,
     address: "Soi Chula 9, Bantadthong",
     category: "Market",
-    bestTimeToVisit: "Evening (5-9 PM)",
+    bestTimeToVisit: "Evening",
     estimatedVisitTime: "1-2 hours",
   },
   {
@@ -830,12 +986,17 @@ export const mockLandmarksExpanded = [
     name: "Centenary Park",
     description: "Beautiful urban park within Chulalongkorn University celebrating the school's 100th anniversary. Features modern landscaping and peaceful walking paths.",
     image: "https://images.unsplash.com/photo-1519331379826-f10be5486c6f?w=800&h=600&fit=crop",
-    images: [],
+    images: [
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1573812461383-e5f8b759d12e?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1502082553048-f009c37129b9?w=400&h=400&fit=crop"
+    ],
     rating: 4.6,
     reviewCount: 1234,
     reviews: [
-      { id: "r6", userName: "David L.", rating: 5, comment: "Perfect spot for a morning jog or afternoon reading. Very peaceful.", date: "2024-01-13", helpful: 28 },
-      { id: "r7", userName: "Emma S.", rating: 4, comment: "Nice green space in the heart of the city. Great for photos.", date: "2024-01-11", helpful: 19 },
+      { id: "r7", userName: "David L.", rating: 5, comment: "Perfect spot for a morning jog or afternoon reading. Very peaceful.", date: "2024-01-13", helpful: 28 },
+      { id: "r8", userName: "Emma S.", rating: 4, comment: "Nice green space in the heart of the city. Great for photos.", date: "2024-01-11", helpful: 19 },
+      { id: "r9", userName: "James R.", rating: 5, comment: "Beautiful park with well-maintained gardens.", date: "2024-01-06", helpful: 12 },
     ],
     instagramHashtag: "#CentenaryPark",
     lat: 13.7395,
@@ -850,12 +1011,17 @@ export const mockLandmarksExpanded = [
     name: "Faculty of Arts Building",
     description: "Historic colonial-era building with beautiful architecture. Popular photo spot featuring European-style design and lush gardens.",
     image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=800&h=600&fit=crop",
-    images: [],
+    images: [
+      "https://images.unsplash.com/photo-1562774053-701939374585?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1592280771190-3e2e4d571952?w=400&h=400&fit=crop"
+    ],
     rating: 4.5,
     reviewCount: 876,
     reviews: [
-      { id: "r8", userName: "Chris B.", rating: 5, comment: "Such beautiful architecture! Feels like stepping back in time.", date: "2024-01-09", helpful: 25 },
-      { id: "r9", userName: "Jenny T.", rating: 4, comment: "Great for Instagram photos. The building is stunning.", date: "2024-01-07", helpful: 18 },
+      { id: "r10", userName: "Chris B.", rating: 5, comment: "Such beautiful architecture! Feels like stepping back in time.", date: "2024-01-09", helpful: 25 },
+      { id: "r11", userName: "Jenny T.", rating: 4, comment: "Great for Instagram photos. The building is stunning.", date: "2024-01-07", helpful: 18 },
+      { id: "r12", userName: "Mark H.", rating: 5, comment: "Historic gem with gorgeous colonial design.", date: "2024-01-03", helpful: 14 },
     ],
     instagramHashtag: "#ChulaArts",
     lat: 13.7412,
@@ -870,12 +1036,17 @@ export const mockLandmarksExpanded = [
     name: "Chamchuri Square",
     description: "Modern office and shopping complex at the heart of Bantadthong. Features restaurants, cafes, bookshops, and convenient amenities.",
     image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&h=600&fit=crop",
-    images: [],
+    images: [
+      "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=400&fit=crop"
+    ],
     rating: 4.4,
     reviewCount: 1567,
     reviews: [
-      { id: "r10", userName: "Alex H.", rating: 5, comment: "Great place for lunch! Lots of food options and nice AC.", date: "2024-01-08", helpful: 32 },
-      { id: "r11", userName: "May L.", rating: 4, comment: "Clean and modern. Good escape from the heat.", date: "2024-01-06", helpful: 14 },
+      { id: "r13", userName: "Alex H.", rating: 5, comment: "Great place for lunch! Lots of food options and nice AC.", date: "2024-01-08", helpful: 32 },
+      { id: "r14", userName: "May L.", rating: 4, comment: "Clean and modern. Good escape from the heat.", date: "2024-01-06", helpful: 14 },
+      { id: "r15", userName: "Ryan P.", rating: 4, comment: "Convenient shopping and dining all in one place.", date: "2024-01-02", helpful: 11 },
     ],
     instagramHashtag: "#ChamchuriSquare",
     lat: 13.7385,
@@ -890,12 +1061,17 @@ export const mockLandmarksExpanded = [
     name: "Soi Chula Art Walk",
     description: "Street art corridor featuring murals and installations by local artists. A colorful walking route through the student neighborhood.",
     image: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=800&h=600&fit=crop",
-    images: [],
+    images: [
+      "https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1561214115-f2f134cc4912?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=400&h=400&fit=crop"
+    ],
     rating: 4.5,
     reviewCount: 567,
     reviews: [
-      { id: "r12", userName: "Mark R.", rating: 5, comment: "Amazing street art! Perfect for photos. Every corner has something interesting.", date: "2024-01-14", helpful: 36 },
-      { id: "r13", userName: "Sophie C.", rating: 4, comment: "Cool urban art scene. Best visited during golden hour.", date: "2024-01-12", helpful: 21 },
+      { id: "r16", userName: "Mark R.", rating: 5, comment: "Amazing street art! Perfect for photos. Every corner has something interesting.", date: "2024-01-14", helpful: 36 },
+      { id: "r17", userName: "Sophie C.", rating: 4, comment: "Cool urban art scene. Best visited during golden hour.", date: "2024-01-12", helpful: 21 },
+      { id: "r18", userName: "Ben W.", rating: 5, comment: "Hidden gem for art lovers. Very Instagram-worthy!", date: "2024-01-09", helpful: 17 },
     ],
     instagramHashtag: "#ChulaArtWalk",
     lat: 13.7425,
@@ -910,12 +1086,17 @@ export const mockLandmarksExpanded = [
     name: "Bantadthong Junction",
     description: "The heart of Bantadthong where multiple sois converge. Known for street food vendors, coffee shops, and the vibrant student atmosphere.",
     image: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&h=600&fit=crop",
-    images: [],
+    images: [
+      "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop"
+    ],
     rating: 4.3,
     reviewCount: 1234,
     reviews: [
-      { id: "r14", userName: "John D.", rating: 4, comment: "Great meeting point. Lots of food and coffee options around.", date: "2024-01-13", helpful: 28 },
-      { id: "r15", userName: "Linda K.", rating: 4, comment: "Authentic Bangkok street life. Love the energy here.", date: "2024-01-10", helpful: 19 },
+      { id: "r19", userName: "John D.", rating: 4, comment: "Great meeting point. Lots of food and coffee options around.", date: "2024-01-13", helpful: 28 },
+      { id: "r20", userName: "Linda K.", rating: 4, comment: "Authentic Bangkok street life. Love the energy here.", date: "2024-01-10", helpful: 19 },
+      { id: "r21", userName: "Peter N.", rating: 5, comment: "Best area for cheap eats and local vibes.", date: "2024-01-07", helpful: 15 },
     ],
     instagramHashtag: "#Bantadthong",
     lat: 13.7420,
@@ -930,12 +1111,17 @@ export const mockLandmarksExpanded = [
     name: "CU Book Center",
     description: "Multi-story bookstore at Chulalongkorn University with Thai and English books, stationery, and a cozy cafe. Popular study spot.",
     image: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=800&h=600&fit=crop",
-    images: [],
+    images: [
+      "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=400&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&h=400&fit=crop"
+    ],
     rating: 4.6,
     reviewCount: 987,
     reviews: [
-      { id: "r16", userName: "Art L.", rating: 5, comment: "Best bookstore in the area! Great selection and the cafe is perfect for reading.", date: "2024-01-11", helpful: 32 },
-      { id: "r17", userName: "Nina M.", rating: 5, comment: "Love spending afternoons here. Quiet atmosphere and good AC.", date: "2024-01-09", helpful: 24 },
+      { id: "r22", userName: "Art L.", rating: 5, comment: "Best bookstore in the area! Great selection and the cafe is perfect for reading.", date: "2024-01-11", helpful: 32 },
+      { id: "r23", userName: "Nina M.", rating: 5, comment: "Love spending afternoons here. Quiet atmosphere and good AC.", date: "2024-01-09", helpful: 24 },
+      { id: "r24", userName: "Sam T.", rating: 4, comment: "Great place for book lovers. Nice cafe inside too.", date: "2024-01-04", helpful: 18 },
     ],
     instagramHashtag: "#CUBookCenter",
     lat: 13.7398,

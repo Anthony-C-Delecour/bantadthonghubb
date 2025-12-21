@@ -32,6 +32,7 @@ export interface RestaurantCard {
   distance: string;
   distanceMeters: number;
   image: string;
+  foodImages?: string[];
   knownFor: string[];
   signatureDishes: string[];
   description: string;

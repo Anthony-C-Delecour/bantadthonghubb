@@ -47,17 +47,20 @@ export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProp
     if (lowerTime.includes("evening")) return t("evening");
     return time;
   };
+
+  // Get all images to display (main image + additional images)
+  const allImages = [landmark.image, ...(landmark.images || [])].filter(Boolean);
+  const displayImages = allImages.slice(0, 4); // Show up to 4 images
   
   return (
     <div
-      onClick={onClick}
       className={cn(
         "bg-card border rounded-2xl overflow-hidden cursor-pointer transition-all hover:shadow-lg",
         isSelected ? "border-primary ring-2 ring-primary/20" : "border-border"
       )}
     >
-      {/* Image */}
-      <div className="relative aspect-[16/10] overflow-hidden">
+      {/* Main Image */}
+      <div className="relative aspect-[16/10] overflow-hidden" onClick={onClick}>
         <img
           src={landmark.image}
           alt={landmark.name}
@@ -76,6 +79,34 @@ export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProp
           </span>
         </div>
       </div>
+
+      {/* Image Gallery with Reviews - Shows when multiple images exist */}
+      {displayImages.length > 1 && (
+        <div className="px-4 pt-3">
+          <div className="grid grid-cols-3 gap-2">
+            {displayImages.slice(1, 4).map((img, index) => {
+              const review = landmark.reviews[index];
+              return (
+                <div key={index} className="space-y-1">
+                  <div className="relative aspect-square rounded-lg overflow-hidden">
+                    <img
+                      src={img}
+                      alt={`${landmark.name} view ${index + 2}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  {review && (
+                    <p className="text-[10px] text-muted-foreground line-clamp-2 leading-tight">
+                      "{review.comment.slice(0, 40)}..."
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Content */}
       <div className="p-4">
@@ -108,8 +139,8 @@ export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProp
           </span>
         </div>
 
-        {/* Preview of top review */}
-        {landmark.reviews.length > 0 && (
+        {/* Preview of top review - only show if no gallery */}
+        {displayImages.length <= 1 && landmark.reviews.length > 0 && (
           <div className="mt-3 pt-3 border-t border-border">
             <div className="flex items-center gap-2 mb-1">
               <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
@@ -136,7 +167,7 @@ export function LandmarkCard({ landmark, onClick, isSelected }: LandmarkCardProp
           </div>
         )}
 
-        <Button variant="ghost" size="sm" className="w-full mt-3">
+        <Button variant="ghost" size="sm" className="w-full mt-3" onClick={onClick}>
           {t("viewOnMap")} <ChevronRight className="h-4 w-4 ml-1" />
         </Button>
       </div>
