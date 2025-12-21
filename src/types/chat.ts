@@ -4,6 +4,7 @@ export interface Message {
   role: "user" | "assistant";
   timestamp: Date;
   restaurantCard?: RestaurantCard;
+  restaurantCards?: RestaurantCard[];
 }
 
 export interface ChatSession {
@@ -22,12 +23,24 @@ export interface RestaurantCard {
   reviewCount: number;
   cuisine: string;
   priceRange: string;
+  priceMin: number;
+  priceMax: number;
+  bahtTier: string;
+  waitTimeMin: number;
+  waitTimeMax: number;
   waitTime: number;
   distance: string;
+  distanceMeters: number;
   image: string;
   knownFor: string[];
+  signatureDishes: string[];
+  description: string;
   tablesAvailable: number;
   totalTables: number;
+  lat: number;
+  lng: number;
+  address: string;
+  openHours: string;
 }
 
 export type ChatMode = "chat" | "itinerary" | "landmark" | "polaroid";
@@ -35,8 +48,11 @@ export type ChatMode = "chat" | "itinerary" | "landmark" | "polaroid";
 export interface User {
   id: string;
   username: string;
+  displayName?: string;
   email?: string;
-  consentGiven: boolean;
+  profilePicture?: string;
+  accountType: "user" | "business";
+  dataSharingEnabled: boolean;
   createdAt: Date;
 }
 
@@ -48,4 +64,10 @@ export interface LiveNotification {
   rating?: number;
   comment?: string;
   timestamp: Date;
+}
+
+export interface MapLocation {
+  lat: number;
+  lng: number;
+  name?: string;
 }
