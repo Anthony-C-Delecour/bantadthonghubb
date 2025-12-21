@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Clock, Navigation, Star, X, Footprints, Car, Bus, ChevronDown, ChevronUp, MapPin, Locate, Play, Pause, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Fix for default marker icons
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -260,6 +261,7 @@ export default function MapContent({
   showLandmarks = false,
 }: MapContentProps) {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const mapElRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<Record<string, L.Marker>>({});
@@ -320,8 +322,8 @@ export default function MapContent({
   const requestUserLocation = useCallback(() => {
     if (!navigator.geolocation) {
       toast({
-        title: "Location not supported",
-        description: "Your browser doesn't support geolocation. Using Bantadthong center.",
+        title: t("locationNotSupported"),
+        description: t("browserNoGeolocation"),
       });
       setUserPos(BANTADTHONG_CENTER);
       return;
@@ -338,15 +340,15 @@ export default function MapContent({
           setMapCenter([lat, lng]);
           setGpsAccuracy(pos.coords.accuracy);
           toast({
-            title: "📍 Location found",
-            description: `Accuracy: ${Math.round(pos.coords.accuracy)}m`,
+            title: t("locationFoundTitle"),
+            description: `${t("accuracyLabel")}: ${Math.round(pos.coords.accuracy)}m`,
           });
         } else {
           setUserPos(BANTADTHONG_CENTER);
           setMapCenter([BANTADTHONG_CENTER.lat, BANTADTHONG_CENTER.lng]);
           toast({
-            title: "Location outside Bantadthong",
-            description: "Using Bantadthong center as your location",
+            title: t("locationOutsideBantadthong"),
+            description: t("usingBantadthongCenter"),
           });
         }
       },
@@ -354,21 +356,21 @@ export default function MapContent({
         console.error("Geolocation error:", error);
         setUserPos(BANTADTHONG_CENTER);
         toast({
-          title: "Could not get location",
-          description: "Using Bantadthong center. Please enable location access.",
+          title: t("couldNotGetLocation"),
+          description: t("enableLocationAccess"),
           variant: "destructive",
         });
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
-  }, [toast]);
+  }, [toast, t]);
 
   // Start real-time GPS tracking
   const startLiveTracking = useCallback(() => {
     if (!navigator.geolocation) {
       toast({
-        title: "Location not supported",
-        description: "Your browser doesn't support geolocation.",
+        title: t("locationNotSupported"),
+        description: t("browserNoGeolocation"),
         variant: "destructive",
       });
       return;
@@ -376,8 +378,8 @@ export default function MapContent({
 
     setIsLiveTracking(true);
     toast({
-      title: "🔴 Live tracking enabled",
-      description: "Your location will update in real-time",
+      title: t("liveTrackingEnabled"),
+      description: t("locationWillUpdate"),
     });
 
     watchIdRef.current = navigator.geolocation.watchPosition(
@@ -402,8 +404,8 @@ export default function MapContent({
             if (distance < 30) { // Within 30 meters
               setIsNavigating(false);
               toast({
-                title: "🎉 You've arrived!",
-                description: `Welcome to ${destination.name}`,
+                title: t("youveArrived"),
+                description: `${t("welcomeTo")} ${destination.name}`,
               });
             }
           }
@@ -412,8 +414,8 @@ export default function MapContent({
       (error) => {
         console.error("GPS tracking error:", error);
         toast({
-          title: "GPS error",
-          description: "Could not update location. Retrying...",
+          title: t("gpsError"),
+          description: t("couldNotUpdateLocation"),
           variant: "destructive",
         });
       },
@@ -423,7 +425,7 @@ export default function MapContent({
         maximumAge: 0,
       }
     );
-  }, [toast, selectedRestaurant, selectedLandmark, isNavigating]);
+  }, [toast, t, selectedRestaurant, selectedLandmark, isNavigating]);
 
   // Stop real-time GPS tracking
   const stopLiveTracking = useCallback(() => {
@@ -434,10 +436,10 @@ export default function MapContent({
     setIsLiveTracking(false);
     setGpsAccuracy(null);
     toast({
-      title: "Live tracking stopped",
-      description: "Your location is no longer being tracked",
+      title: t("liveTrackingStopped"),
+      description: t("locationNoLongerTracked"),
     });
-  }, [toast]);
+  }, [toast, t]);
 
   // Cleanup GPS watch on unmount
   useEffect(() => {
