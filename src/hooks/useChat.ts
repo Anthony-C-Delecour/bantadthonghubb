@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { Message, ChatSession, ChatMode, RestaurantCard } from "@/types/chat";
 import { mockRestaurants, welcomeMessages } from "@/data/mockData";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const generateId = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
@@ -144,7 +145,7 @@ const getRecommendations = (intent: ReturnType<typeof parseUserIntent>): Restaur
   return filtered.slice(0, 3);
 };
 
-const generateResponse = (userMessage: string): { content: string; restaurantCards?: RestaurantCard[] } => {
+const generateResponse = (userMessage: string, t: (key: string) => string): { content: string; restaurantCards?: RestaurantCard[] } => {
   const message = userMessage.toLowerCase();
   const intent = parseUserIntent(message);
   
@@ -181,32 +182,32 @@ const generateResponse = (userMessage: string): { content: string; restaurantCar
       // Fallback to top-rated restaurants
       const fallback = mockRestaurants.slice(0, 3);
       return {
-        content: "I couldn't find an exact match, but here are some top-rated options in Bantadthong that you might enjoy!",
+        content: t("botNoMatch"),
         restaurantCards: fallback,
       };
     }
 
     // Build response based on intent
-    let responsePrefix = "Based on what you're looking for, ";
+    let responsePrefix = "";
     
     if (intent.pricePreference === "cheap") {
-      responsePrefix += "here are some great budget-friendly options";
+      responsePrefix = t("botBudgetFriendly");
     } else if (intent.pricePreference === "premium") {
-      responsePrefix += "here are some premium dining experiences";
+      responsePrefix = t("botPremium");
     } else if (intent.waitPreference === "no-wait") {
-      responsePrefix += "here are places with minimal wait times";
+      responsePrefix = t("botMinimalWait");
     } else if (intent.spicePreference) {
-      responsePrefix += "here are some deliciously spicy options";
+      responsePrefix = t("botSpicy");
     } else if (intent.seafoodPreference) {
-      responsePrefix += "here are the best seafood spots";
+      responsePrefix = t("botSeafood");
     } else if (intent.timePreference === "late") {
-      responsePrefix += "here are great late-night spots";
+      responsePrefix = t("botLateNight");
     } else {
-      responsePrefix = "Here are my top recommendations for you";
+      responsePrefix = t("botTopPicks");
     }
 
     const topPick = recommendations[0];
-    const content = `${responsePrefix}:\n\n**${topPick.name}** is my top pick! ${topPick.description}\n\n• Wait time: ~${topPick.waitTime} minutes\n• Price: ${topPick.priceRange}\n• Known for: ${topPick.signatureDishes.join(", ")}\n\nWould you like directions or more options?`;
+    const content = `${responsePrefix}:\n\n**${topPick.name}** ${t("botTopPickIntro")} ${topPick.description}\n\n• ${t("botWaitTime")}: ~${topPick.waitTime} ${t("minutes")}\n• ${t("botPrice")}: ${topPick.priceRange}\n• ${t("botKnownFor")}: ${topPick.signatureDishes.join(", ")}\n\n${t("botDirectionsPrompt")}`;
 
     return {
       content,
@@ -217,31 +218,32 @@ const generateResponse = (userMessage: string): { content: string; restaurantCar
   // Map/route queries
   if (message.includes("map") || message.includes("route") || message.includes("direction") || message.includes("navigate") || message.includes("how to get")) {
     return {
-      content: "I can show you the way! 🗺️ Click on any restaurant card to see it on the map and get walking directions. You can also set a starting point and I'll calculate the best route for you.",
+      content: t("botMapHelp"),
     };
   }
 
   // Landmark/photo queries
   if (message.includes("photo") || message.includes("landmark") || message.includes("instagram") || message.includes("picture") || message.includes("spot")) {
     return {
-      content: "Bantadthong has some amazing photo spots! 📸\n\n**Top Instagram-worthy locations:**\n• Chulalongkorn University - stunning architecture\n• Siam Square - trendy street scenes\n• Jim Thompson House - traditional Thai charm\n\nWould you like me to show you more details or help you plan a photo walk?",
+      content: t("botPhotoSpots"),
     };
   }
 
   // Itinerary queries
   if (message.includes("plan") || message.includes("itinerary") || message.includes("day") || message.includes("schedule")) {
     return {
-      content: "I'd love to help you plan your perfect day in Bantadthong! 📋\n\nTo create the best itinerary, tell me:\n• Your budget (cheap ฿, mid ฿฿, or premium ฿฿฿)\n• How many places you want to visit\n• Any cuisine preferences\n• Time constraints (morning, afternoon, or evening)\n\nI'll optimize your route to minimize waiting and walking!",
+      content: t("botItineraryHelp"),
     };
   }
 
   // Default response
   return {
-    content: "I'd be happy to help you explore Bantadthong! You can:\n\n• Ask for restaurant recommendations (\"find cheap eats\", \"best seafood\", \"no wait\")\n• Get directions to any place\n• Plan an itinerary\n• Discover photo spots\n\nWhat would you like to do?",
+    content: t("botDefaultHelp"),
   };
 };
 
 export function useChat() {
+  const { t } = useLanguage();
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -300,7 +302,7 @@ export function useChat() {
     // Simulate AI thinking time
     await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1200));
 
-    const response = generateResponse(content);
+    const response = generateResponse(content, t);
     
     const assistantMessage: Message = {
       id: generateId(),
