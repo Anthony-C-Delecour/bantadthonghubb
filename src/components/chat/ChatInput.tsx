@@ -55,7 +55,7 @@ export function ChatInput({
   }, [input]);
 
   return (
-    <div className="px-4 pb-4 pt-2">
+    <div className="px-3 pb-3 pt-1.5 sm:px-4 sm:pb-4 sm:pt-2">
       {/* Location Context Badge */}
       {showLocationContext && (
         <div className="flex items-center justify-center mb-2">
@@ -106,7 +106,7 @@ export function ChatInput({
           onKeyDown={handleKeyDown}
           placeholder={placeholder || t("messagePlaceholder")}
           disabled={disabled || isLoading}
-          className="min-h-[40px] max-h-[200px] resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 py-2.5 px-1 text-base"
+          className="min-h-[36px] max-h-[120px] resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 py-2 px-1 text-sm sm:text-base sm:min-h-[40px] sm:max-h-[200px]"
           rows={1}
         />
 
