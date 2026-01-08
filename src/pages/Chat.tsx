@@ -127,7 +127,7 @@ export default function Chat() {
     switch (currentMode) {
       case "polaroid":
         return (
-          <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 flex flex-col min-h-0 w-full overflow-hidden">
             <MobileHeader
               currentMode={currentMode}
               onToggleSidebar={handleToggleSidebar}
@@ -141,7 +141,7 @@ export default function Chat() {
         );
       case "itinerary":
         return (
-          <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 flex flex-col min-h-0 w-full overflow-hidden">
             <MobileHeader
               currentMode={currentMode}
               onToggleSidebar={handleToggleSidebar}
@@ -167,7 +167,7 @@ export default function Chat() {
         );
       case "landmark":
         return (
-          <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 flex flex-col min-h-0 w-full overflow-hidden">
             <MobileHeader
               currentMode={currentMode}
               onToggleSidebar={handleToggleSidebar}
