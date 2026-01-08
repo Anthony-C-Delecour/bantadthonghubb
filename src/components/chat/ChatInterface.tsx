@@ -86,7 +86,7 @@ export function ChatInterface({
   }, [session?.messages]);
 
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div className="flex-1 flex flex-col h-full min-h-0">
       {/* Header */}
       <header className="h-14 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-4">
         <div className="flex items-center gap-3">
@@ -158,7 +158,7 @@ export function ChatInterface({
       <ProfileDialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen} />
 
       {/* Messages Area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin min-h-0 overscroll-contain">
         {!session || session.messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center p-8">
             <div className="max-w-md text-center animate-fade-in">
