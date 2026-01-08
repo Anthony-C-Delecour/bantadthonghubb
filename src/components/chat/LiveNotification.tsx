@@ -61,8 +61,12 @@ export function LiveNotifications() {
 
   return (
     <div className={cn(
-      "notification-toast max-w-sm",
-      "animate-slide-up"
+      "fixed z-50 max-w-sm bg-card border border-border rounded-2xl p-4 shadow-xl",
+      // Mobile: top position, below header
+      "top-16 left-3 right-3 sm:left-auto sm:right-auto",
+      // Desktop: bottom-left position
+      "sm:top-auto sm:bottom-4 sm:left-4",
+      "animate-slide-up sm:animate-slide-up"
     )}>
       <button 
         onClick={handleDismiss}
