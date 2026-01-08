@@ -7,6 +7,7 @@ import { BantadthongMap } from "@/components/chat/BantadthongMap";
 import { PolaroidMode } from "@/components/chat/PolaroidMode";
 import { ItineraryMode } from "@/components/chat/ItineraryMode";
 import { LandmarkMode } from "@/components/chat/LandmarkMode";
+import { MobileHeader } from "@/components/chat/MobileHeader";
 import { useChat } from "@/hooks/useChat";
 import { useToast } from "@/hooks/use-toast";
 import { mockRestaurants } from "@/data/mockData";
@@ -126,44 +127,65 @@ export default function Chat() {
     switch (currentMode) {
       case "polaroid":
         return (
-          <div className="flex-1 flex flex-col overflow-y-auto min-h-0">
-            <PolaroidMode />
+          <div className="flex-1 flex flex-col min-h-0">
+            <MobileHeader
+              currentMode={currentMode}
+              onToggleSidebar={handleToggleSidebar}
+              onLogout={handleLogout}
+            />
+            <div className="flex-1 overflow-y-auto min-h-0">
+              <PolaroidMode />
+            </div>
           </div>
         );
       case "itinerary":
         return (
-          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0"> 
-            <div className="lg:w-1/2 overflow-y-auto border-r border-border min-h-0">
-              <ItineraryMode 
-                onSelectRestaurant={handleRestaurantClick}
-              />
-            </div>
-            <div className="lg:w-1/2 h-64 lg:h-full">
-              <BantadthongMap
-                selectedRestaurantId={selectedRestaurantId}
-                onRestaurantSelect={handleMapRestaurantSelect}
-                showRoute={true}
-                className="h-full rounded-none"
-              />
+          <div className="flex-1 flex flex-col min-h-0">
+            <MobileHeader
+              currentMode={currentMode}
+              onToggleSidebar={handleToggleSidebar}
+              onLogout={handleLogout}
+            />
+            <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0"> 
+              <div className="lg:w-1/2 overflow-y-auto border-r border-border min-h-0">
+                <ItineraryMode 
+                  onSelectRestaurant={handleRestaurantClick}
+                />
+              </div>
+              <div className="lg:w-1/2 h-64 lg:h-full">
+                <BantadthongMap
+                  selectedRestaurantId={selectedRestaurantId}
+                  onRestaurantSelect={handleMapRestaurantSelect}
+                  showRoute={true}
+                  className="h-full rounded-none"
+                />
+              </div>
             </div>
           </div>
         );
       case "landmark":
         return (
-          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
-            <div className="lg:w-1/2 overflow-y-auto min-h-0">
-              <LandmarkMode
-                selectedLandmarkId={selectedLandmarkId}
-                onSelectLandmark={(id) => setSelectedLandmarkId(id)}
-              />
-            </div>
-            <div className="lg:w-1/2 h-64 lg:h-full border-l border-border">
-              <BantadthongMap
-                selectedLandmarkId={selectedLandmarkId}
-                showRoute={true}
-                showLandmarks={true}
-                className="h-full rounded-none"
-              />
+          <div className="flex-1 flex flex-col min-h-0">
+            <MobileHeader
+              currentMode={currentMode}
+              onToggleSidebar={handleToggleSidebar}
+              onLogout={handleLogout}
+            />
+            <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+              <div className="lg:w-1/2 overflow-y-auto min-h-0">
+                <LandmarkMode
+                  selectedLandmarkId={selectedLandmarkId}
+                  onSelectLandmark={(id) => setSelectedLandmarkId(id)}
+                />
+              </div>
+              <div className="lg:w-1/2 h-64 lg:h-full border-l border-border">
+                <BantadthongMap
+                  selectedLandmarkId={selectedLandmarkId}
+                  showRoute={true}
+                  showLandmarks={true}
+                  className="h-full rounded-none"
+                />
+              </div>
             </div>
           </div>
         );
