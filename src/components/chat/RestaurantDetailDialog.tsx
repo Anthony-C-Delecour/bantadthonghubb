@@ -67,13 +67,13 @@ export function RestaurantDetailDialog({
   const availabilityPercent = (restaurant.tablesAvailable / restaurant.totalTables) * 100;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] p-0 overflow-hidden">
+    <Dialog open={open} onOpenChange={onOpenChange} modal={true}>
+      <DialogContent className="max-w-lg max-h-[85dvh] p-0 overflow-hidden" onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader className="sr-only">
           <DialogTitle>{restaurant.name}</DialogTitle>
         </DialogHeader>
         
-        <ScrollArea className="max-h-[90vh]">
+        <ScrollArea className="max-h-[85dvh]">
           <div className="relative">
             {/* Hero Image */}
             <div className="relative h-48 overflow-hidden">

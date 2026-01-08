@@ -110,7 +110,7 @@ export function HelpSupportDialog({ open, onOpenChange }: HelpSupportDialogProps
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-[85dvh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>{t("helpTitle")}</DialogTitle>
           <DialogDescription>
