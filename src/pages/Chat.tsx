@@ -126,14 +126,14 @@ export default function Chat() {
     switch (currentMode) {
       case "polaroid":
         return (
-          <div className="flex-1 flex flex-col overflow-y-auto">
+          <div className="flex-1 flex flex-col overflow-y-auto min-h-0">
             <PolaroidMode />
           </div>
         );
       case "itinerary":
         return (
-          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-            <div className="lg:w-1/2 overflow-y-auto border-r border-border">
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0"> 
+            <div className="lg:w-1/2 overflow-y-auto border-r border-border min-h-0">
               <ItineraryMode 
                 onSelectRestaurant={handleRestaurantClick}
               />
@@ -150,8 +150,8 @@ export default function Chat() {
         );
       case "landmark":
         return (
-          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
-            <div className="lg:w-1/2 overflow-y-auto">
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-0">
+            <div className="lg:w-1/2 overflow-y-auto min-h-0">
               <LandmarkMode
                 selectedLandmarkId={selectedLandmarkId}
                 onSelectLandmark={(id) => setSelectedLandmarkId(id)}
@@ -170,9 +170,9 @@ export default function Chat() {
       default:
         // Chat mode - show map as overlay when restaurant is selected
         return (
-          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+          <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative min-h-0">
             <div className={cn(
-              "flex-1 flex flex-col",
+              "flex-1 flex flex-col min-h-0",
               showMap && !isMobile && "lg:w-1/2"
             )}>
               <ChatInterface
