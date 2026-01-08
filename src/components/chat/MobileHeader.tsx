@@ -33,7 +33,7 @@ export function MobileHeader({
 
   return (
     <>
-      <header className="h-14 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-4 shrink-0">
+      <header className="sticky top-0 z-50 h-14 border-b border-border bg-background/80 backdrop-blur-sm flex items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
