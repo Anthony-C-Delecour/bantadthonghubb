@@ -106,6 +106,12 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'DM Sans', system-ui, sans-serif;
   }
+
+  /* Prevent Radix UI from locking body scroll on mobile */
+  body[data-scroll-locked] {
+    overflow: auto !important;
+    margin-right: 0 !important;
+  }
 }
 
 @layer components {

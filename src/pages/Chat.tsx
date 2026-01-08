@@ -222,7 +222,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="h-screen flex overflow-hidden bg-background">
+    <div className="h-[100dvh] flex overflow-hidden bg-background">
       {/* Mobile Sidebar Overlay */}
       {isMobile && showMobileSidebar && (
         <div 
