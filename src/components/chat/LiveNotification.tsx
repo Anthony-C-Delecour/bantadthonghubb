@@ -60,14 +60,20 @@ export function LiveNotifications() {
   if (!currentNotification || !isVisible) return null;
 
   return (
-    <div className={cn(
-      "fixed z-50 max-w-sm bg-card border border-border rounded-2xl p-4 shadow-xl",
-      // Mobile: top position, below header
-      "top-16 left-3 right-3 sm:left-auto sm:right-auto",
-      // Desktop: bottom-left position
-      "sm:top-auto sm:bottom-4 sm:left-4",
-      "animate-slide-up sm:animate-slide-up"
-    )}>
+    <div 
+      className={cn(
+        "fixed max-w-sm bg-card border border-border rounded-2xl p-4 shadow-xl",
+        // Mobile: top position, below header with safe area
+        "top-[60px] left-3 right-3 z-[100]",
+        // Desktop: bottom-left position  
+        "sm:top-auto sm:bottom-4 sm:left-4 sm:right-auto sm:max-w-sm",
+        "animate-fade-in"
+      )}
+      style={{ 
+        // Ensure it's visible on iOS with safe area
+        marginTop: 'env(safe-area-inset-top, 0px)' 
+      }}
+    >
       <button 
         onClick={handleDismiss}
         className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors"
