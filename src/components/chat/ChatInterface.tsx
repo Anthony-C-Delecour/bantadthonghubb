@@ -112,7 +112,7 @@ export function ChatInterface({
 
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium capitalize">
-              {currentMode === "chat" ? t("chatMode") : t(`${currentMode}Mode`)}
+              {currentMode === "chat" ? t("chatMode") : t(currentMode)}
             </span>
             {currentMode !== "chat" && (
               <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full">
