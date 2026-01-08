@@ -158,7 +158,11 @@ export function ChatInterface({
       <ProfileDialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen} />
 
       {/* Messages Area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto scrollbar-thin min-h-0 overscroll-contain">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto scrollbar-thin min-h-0 overscroll-contain touch-pan-y"
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
         {!session || session.messages.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center p-8">
             <div className="max-w-md text-center animate-fade-in">

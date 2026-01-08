@@ -180,6 +180,11 @@
     background-color: hsl(var(--muted));
     border-radius: 3px;
   }
+
+  /* Allow touch scrolling inside nested scroll containers on mobile */
+  .touch-pan-y {
+    touch-action: pan-y;
+  }
 }
 
 /* Leaflet Map Styles */
