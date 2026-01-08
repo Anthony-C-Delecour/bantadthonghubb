@@ -111,6 +111,8 @@
   body[data-scroll-locked] {
     overflow: auto !important;
     margin-right: 0 !important;
+    touch-action: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
