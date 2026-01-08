@@ -106,7 +106,7 @@ export function ChatInput({
           onKeyDown={handleKeyDown}
           placeholder={placeholder || t("messagePlaceholder")}
           disabled={disabled || isLoading}
-          className="min-h-[36px] max-h-[120px] resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 py-2 px-1 text-sm sm:text-base sm:min-h-[40px] sm:max-h-[200px]"
+          className="min-h-[36px] max-h-[120px] resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 py-2 px-1 text-base sm:max-h-[200px]"
           rows={1}
         />
 
